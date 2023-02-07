@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Player Online</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
+}
+.folder {
+	margin: 10px;
+    border: 2px solid #cecece;
+    border-radius: 12px;
+    padding: 5px;
+    background-color: #fff;
+}
+.file {
+	margin: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #cecece;
+}
+</style>
+</head>
+<body>
+
+<input type="file" id="filepicker" name="fileList" webkitdirectory directory multiple />
+<audio id="audioPlayer" controls>
+    <source id="audioSource" type="audio/mpeg">
+</audio>
+<div id="folders"><div>
+
+<script>
+
+const folders = document.getElementById('folders');
+const filepicker = document.getElementById('filepicker');
+var audiolinks = [];
+var lastplayed = 0;
+
+const audioPlayer = document.querySelector("#audioPlayer");
+const audioSource = document.querySelector("#audioSource");
+
+function playaudio(i) {
+    if (i > audiolinks.length-1) {
+        i = 0;
+    }
+    if (i < 0) {
+        i = audiolinks.length-1;
+    }
+    audioSource.src = audiolinks[i][1];
+    audioPlayer.load();
+    audioPlayer.play().then(_ => { 
+        if ('mediaSession' in navigator) {
+
+            navigator.mediaSession.metadata = new MediaMetadata({
+            title: audiolinks[i][0].split("/").pop(),
+            artwork: [
+                { src: 'https://dummyimage.com/96x96',   sizes: '96x96',   type: 'image/png' },
+                { src: 'https://dummyimage.com/128x128', sizes: '128x128', type: 'image/png' },
+                { src: 'https://dummyimage.com/192x192', sizes: '192x192', type: 'image/png' },
+                { src: 'https://dummyimage.com/256x256', sizes: '256x256', type: 'image/png' },
+                { src: 'https://dummyimage.com/384x384', sizes: '384x384', type: 'image/png' },
+                { src: 'https://dummyimage.com/512x512', sizes: '512x512', type: 'image/png' },
+            ]
+            });
+            navigator.mediaSession.setActionHandler('previoustrack', () => { playaudio(i-1) });
+            navigator.mediaSession.setActionHandler('nexttrack', () => { playaudio(i+1) });
+            navigator.mediaSession.setActionHandler('seekforward', () => { audioPlayer.currentTime = audioPlayer.currentTime+10 });
+            navigator.mediaSession.setActionHandler('seekbackward', () => { audioPlayer.currentTime = audioPlayer.currentTime-10 });
+        }
+    })
+    .catch(error => { console.log(error) });
+    for (let i = 0; i < document.getElementsByClassName("file").length; i++) { 
+        document.getElementsByClassName("file")[i].style = "";
+    }
+    document.getElementById(audiolinks[i][0].split("/").pop()).style.color = "#009b00";
+    lastplayed = i;
+}
+
+audioPlayer.addEventListener("ended", function() {
+    console.log(lastplayed+1);
+    lastplayed = lastplayed+1;
+    playaudio(lastplayed);
+});
+
+
+filepicker.addEventListener('change', (event) => {
+  	const files = event.target.files;
+
+  	for (const file of files) {
+        if (file.type.startsWith("audio") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
+            const filesplit = file.webkitRelativePath.split("/");
+            for (let i = 0; i < filesplit.length; i++) {
+                var parent = document.querySelector('[id="'+filesplit[i-1]+'"]');
+                if (i == 0) {
+                    parent = document.querySelector('[id="folders"]');
+                }
+                if (i != filesplit.length-1 && !parent.querySelector('[id="'+filesplit[i]+'"]')) {
+                    var folderdiv = document.createElement("div");
+                    folderdiv.id = filesplit[i];
+                    folderdiv.className = "folder";
+                    folderdiv.innerText = filesplit[i];
+                    if (!document.getElementById(filesplit[i-1])) {
+                        folders.appendChild(folderdiv);
+                    } else {
+                        document.getElementById(filesplit[i-1]).appendChild(folderdiv)
+                    }
+                } else if (!parent.querySelector('[id="'+filesplit[i]+'"]')) {
+                    var filediv = document.createElement("div");
+                    filediv.id = filesplit[i];
+                    filediv.className = "file";
+                    filediv.innerText = filesplit[i];
+                    audiolinks.push([file.webkitRelativePath, URL.createObjectURL(file)]);
+                    filediv.setAttribute("onclick", 'playaudio('+(audiolinks.length-1)+');');
+                    parent.appendChild(filediv);
+                    
+                }
+            }
+        }
+	}
+});
+
+
+</script>
+
+</body>
+</html>
