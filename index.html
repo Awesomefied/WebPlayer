@@ -33,10 +33,6 @@ body {
 </audio>
 <div id="folders"><div>
 
-<button onclick="var h = document.getElementById('log').style; if (h.display == 'none') {h.display = 'block'}else{h.display = 'none'}">
-    click to show logs
-</button>
-<p id="log" style="display:none;"></p>
 <script>
 
 const folders = document.getElementById('folders');
@@ -70,13 +66,35 @@ function playaudio(i) {
                 { src: 'https://dummyimage.com/512x512', sizes: '512x512', type: 'image/png' },
             ]
             });
-            navigator.mediaSession.setActionHandler('previoustrack', () => { playaudio(i-1) });
-            navigator.mediaSession.setActionHandler('nexttrack', () => { playaudio(i+1) });
-            navigator.mediaSession.setActionHandler('seekforward', () => { audioPlayer.currentTime = audioPlayer.currentTime+10 });
-            navigator.mediaSession.setActionHandler('seekbackward', () => { audioPlayer.currentTime = audioPlayer.currentTime-10 });
+            
         }
     })
     .catch(error => { console.log(error) });
+    const actionHandlers = [
+        ['play',          () => { audioPlayer.play(); }],
+        ['pause',         () => { audioPlayer.pause(); }],
+        ['previoustrack', () => { playaudio(i-1); }],
+        ['nexttrack',     () => { playaudio(i+1); }],
+        ['stop',          () => { audioPlayer.pause();audioPlayer.currentTime = 0; }],
+        ['seekbackward',  (details) => { audioPlayer.currentTime = audioPlayer.currentTime-(details.seekOffset || 10); }],
+        ['seekforward',   (details) => { audioPlayer.currentTime = audioPlayer.currentTime+(details.seekOffset || 10); }],
+        ['seekto',        (details) => { 
+            if (details.fastSeek && 'fastSeek' in audioPlayer) {
+                audioPlayer.fastSeek(details.seekTime);
+                return;
+            }
+            audioPlayer.currentTime = details.seekTime;
+        }],
+    ];
+
+    for (const [action, handler] of actionHandlers) {
+        try {
+        navigator.mediaSession.setActionHandler(action, handler);
+        } catch (error) {
+        console.log(`The media session action "${action}" is not supported yet.`);
+        }
+    }
+
     for (let i = 0; i < document.getElementsByClassName("file").length; i++) { 
         document.getElementsByClassName("file")[i].style = "";
     }
@@ -96,7 +114,6 @@ filepicker.addEventListener('change', (event) => {
 
   	for (const file of files) {
         if (file.type.startsWith("audio") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
-            document.getElementById("log").innerText += file.webkitRelativePath+"\n ";
             const filesplit = file.webkitRelativePath.split("/");
             for (let i = 0; i < filesplit.length; i++) {
                 var parent = document.querySelector('[id="'+filesplit[i-1]+'"]');
