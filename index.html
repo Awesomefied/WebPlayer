@@ -31,17 +31,90 @@ body {
 <audio id="audioPlayer" controls>
     <source id="audioSource" type="audio/mpeg">
 </audio>
+<button id="shuffle" onclick="media('shuffle');">shuffle</button>
+<button id="previous" onclick="media('prev')">prev</button>
+<button id="playpause" onclick="media('play')">play</button>
+<button id="next" onclick="media('next')">next</button>
+<button id="loop" onclick="media('loop');">loop</button>
 <div id="folders"><div>
 
 <script>
-
 const folders = document.getElementById('folders');
 const filepicker = document.getElementById('filepicker');
 var audiolinks = [];
 var lastplayed = 0;
+var prev = [];
+var loop = false;
+var shuffle = false;
 
 const audioPlayer = document.querySelector("#audioPlayer");
 const audioSource = document.querySelector("#audioSource");
+const shufflebtn = document.querySelector("#shuffle");
+const loopbtn = document.querySelector("#loop");
+const previousbtn = document.querySelector("#previous");
+const nextbtn = document.querySelector("#next");
+const playpausebtn = document.querySelector("#playpause");
+
+function random(max) {
+  return Math.floor(Math.random() * max);
+}
+
+function playmem(n) {
+    if (prev.length > 100) {
+        prev.splice(0,prev.length-99);
+    }
+    prev.push(n);
+}
+
+function media(action) {
+    if (action == "play") {
+        if (audioPlayer.paused) {
+            audioPlayer.play();
+        } else {
+            audioPlayer.pause();
+        }
+    }
+    if (action == "loop") {
+        if (loop) {
+            loop = false;
+            loopbtn.style = "";
+        } else {
+            loop = true;
+            loopbtn.style.color = "#009b00";
+        }
+    }
+    if (action == "shuffle") {
+        if (shuffle) {
+            shuffle = false;
+            shufflebtn.style = "";
+        } else {
+            shuffle = true;
+            shufflebtn.style.color = "#009b00";
+        }
+    }
+    if (action == "prev") {
+        if (shuffle && prev.length > 1) { 
+            if (prev.length == 2) { 
+                prev.splice(prev.length-1,prev.length); 
+                playaudio(random(audiolinks.length-1)); 
+                return; 
+            } 
+            playaudio(prev[prev.length-2]); 
+            prev.splice(prev.length-2,prev.length); 
+        } else { 
+            playaudio(lastplayed-1); 
+        }
+    }
+    if (action == "next") {
+        if (shuffle) { 
+            playaudio(random(audiolinks.length-1)); 
+        } else { 
+            playaudio(lastplayed+1) 
+        } 
+    }
+}
+
+
 
 function playaudio(i) {
     if (i > audiolinks.length-1) {
@@ -50,6 +123,7 @@ function playaudio(i) {
     if (i < 0) {
         i = audiolinks.length-1;
     }
+    playmem(i);
     audioSource.src = audiolinks[i][1];
     audioPlayer.load();
     audioPlayer.play().then(_ => { 
@@ -73,8 +147,8 @@ function playaudio(i) {
     const actionHandlers = [
         ['play',          () => { audioPlayer.play(); }],
         ['pause',         () => { audioPlayer.pause(); }],
-        ['previoustrack', () => { playaudio(i-1); }],
-        ['nexttrack',     () => { playaudio(i+1); }],
+        ['previoustrack', () => { media("prev"); }],
+        ['nexttrack',     () => { media("next"); }],
         ['stop',          () => { audioPlayer.pause();audioPlayer.currentTime = 0; }],
         ['seekbackward',  (details) => { audioPlayer.currentTime = audioPlayer.currentTime-(details.seekOffset || 10); }],
         ['seekforward',   (details) => { audioPlayer.currentTime = audioPlayer.currentTime+(details.seekOffset || 10); }],
@@ -100,14 +174,26 @@ function playaudio(i) {
     }
     document.getElementById(audiolinks[i][0]).style.color = "#009b00";
     lastplayed = i;
+    console.log(prev);
 }
 
 audioPlayer.addEventListener("ended", function() {
-    console.log(lastplayed+1);
-    lastplayed = lastplayed+1;
+    if (!loop) {
+        lastplayed = lastplayed+1;
+    }
+    if (shuffle && !loop) {
+        lastplayed = random(audiolinks.length-1);
+    }
     playaudio(lastplayed);
 });
 
+audioPlayer.addEventListener("play", function() {
+    playpausebtn.innerText = "pause";
+});
+
+audioPlayer.addEventListener("pause", function() {
+    playpausebtn.innerText = "play";
+});
 
 filepicker.addEventListener('change', (event) => {
   	const files = event.target.files;
