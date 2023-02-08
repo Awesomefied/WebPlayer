@@ -33,6 +33,10 @@ body {
 </audio>
 <div id="folders"><div>
 
+<button onclick="var h = document.getElementById('log').style; if (h.display == 'none') {h.display = 'block'}else{h.display = 'none'}">
+    click to show logs
+</button>
+<p id="log" style="display:none;"></p>
 <script>
 
 const folders = document.getElementById('folders');
@@ -76,7 +80,7 @@ function playaudio(i) {
     for (let i = 0; i < document.getElementsByClassName("file").length; i++) { 
         document.getElementsByClassName("file")[i].style = "";
     }
-    document.getElementById(audiolinks[i][0].split("/").pop()).style.color = "#009b00";
+    document.getElementById(audiolinks[i][0]).style.color = "#009b00";
     lastplayed = i;
 }
 
@@ -92,13 +96,14 @@ filepicker.addEventListener('change', (event) => {
 
   	for (const file of files) {
         if (file.type.startsWith("audio") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
+            document.getElementById("log").innerText += file.webkitRelativePath+"\n ";
             const filesplit = file.webkitRelativePath.split("/");
             for (let i = 0; i < filesplit.length; i++) {
                 var parent = document.querySelector('[id="'+filesplit[i-1]+'"]');
                 if (i == 0) {
                     parent = document.querySelector('[id="folders"]');
                 }
-                if (i != filesplit.length-1 && !parent.querySelector('[id="'+filesplit[i]+'"]')) {
+                if (i+1 != filesplit.length && !parent.querySelector('[id="'+filesplit[i]+'"]')) {
                     var folderdiv = document.createElement("div");
                     folderdiv.id = filesplit[i];
                     folderdiv.className = "folder";
@@ -108,16 +113,15 @@ filepicker.addEventListener('change', (event) => {
                     } else {
                         document.getElementById(filesplit[i-1]).appendChild(folderdiv)
                     }
-                } else if (!parent.querySelector('[id="'+filesplit[i]+'"]')) {
+                } else if (i+1 == filesplit.length && !document.querySelector('[id="'+file.webkitRelativePath+'"]')) {
                     var filediv = document.createElement("div");
-                    filediv.id = filesplit[i];
+                    filediv.id = file.webkitRelativePath;
                     filediv.className = "file";
                     filediv.innerText = filesplit[i];
                     audiolinks.push([file.webkitRelativePath, URL.createObjectURL(file)]);
                     filediv.setAttribute("onclick", 'playaudio('+(audiolinks.length-1)+');');
-                    parent.appendChild(filediv);
-                    
-                }
+                    parent.appendChild(filediv); 
+                } 
             }
         }
 	}
