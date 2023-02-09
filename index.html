@@ -9,6 +9,11 @@ body {
     background-color: white;
     color: black;
 }
+img {
+    height: 20px;
+    float: right;
+    border-radius: 15%;
+}
 .folder {
 	margin: 10px;
     border: 2px solid #cecece;
@@ -23,25 +28,56 @@ body {
     padding: 5px;
     background-color: #cecece;
 }
+.mediabar {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    gap: 20px;
+    padding: 25px;
+    display: grid;
+    background-color: #fbfbfb;
+    box-shadow: 0px 0px 10px #848484;
+    justify-content: center;
+    box-sizing: border-box;
+}
+.sliderdiv {
+    gap: 25px;
+    display: flex;
+    align-items: center;
+}
+.slider {
+    width: 100%;
+}
 </style>
 </head>
 <body>
 
 <input type="file" id="filepicker" name="fileList" webkitdirectory directory multiple />
-<audio id="audioPlayer" controls>
-    <source id="audioSource" type="audio/mpeg">
-</audio>
-<button id="shuffle" onclick="media('shuffle');">shuffle</button>
-<button id="previous" onclick="media('prev')">prev</button>
-<button id="playpause" onclick="media('play')">play</button>
-<button id="next" onclick="media('next')">next</button>
-<button id="loop" onclick="media('loop');">loop</button>
-<div id="folders"><div>
+<div class="mediabar" id="mediabar">
+    <div class="sliderdiv">
+        <button id="shuffle" onclick="media('shuffle');">shuffle</button>
+        <button id="previous" onclick="media('prev')">prev</button>
+        <button id="playpause" onclick="media('play')">play</button>
+        <button id="next" onclick="media('next')">next</button>
+        <button id="loop" onclick="media('loop');">loop</button>
+    </div>
+    <div class="sliderdiv">
+        <div id="time">0:00</div>
+        <input type="range" min="0" max="100" value="0" class="slider" id="seekbar">
+        <div id="time2">0:00</div>
+        <audio id="audioPlayer">
+            <source id="audioSource" type="audio/mpeg">
+        </audio>
+    </div>
+</div>
+<div id="folders"></div>
 
 <script>
 const folders = document.getElementById('folders');
 const filepicker = document.getElementById('filepicker');
 var audiolinks = [];
+var imagelinks = {};
 var lastplayed = 0;
 var prev = [];
 var loop = false;
@@ -54,11 +90,37 @@ const loopbtn = document.querySelector("#loop");
 const previousbtn = document.querySelector("#previous");
 const nextbtn = document.querySelector("#next");
 const playpausebtn = document.querySelector("#playpause");
+const seekbar = document.querySelector("#seekbar");
 
 function stopclick() {
     if (!e) var e = window.event;
     e.cancelBubble = true;
     if (e.stopPropagation) e.stopPropagation();
+}
+
+const calculateTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${minutes}:${returnedSeconds}`;
+}
+
+function updatebar() {
+    if (seekbar.max != Math.floor(audioPlayer.duration*100)) {
+      seekbar.max = Math.floor(audioPlayer.duration*100);
+    }
+    if (seekbar.value != Math.floor(audioPlayer.currentTime*100)) {
+		  seekbar.value = Math.floor(audioPlayer.currentTime*100);
+    }
+    if (document.getElementById("time").innerText != calculateTime(Math.floor(audioPlayer.currentTime))) {
+      document.getElementById("time").innerText = calculateTime(Math.floor(audioPlayer.currentTime));
+      document.getElementById("time2").innerText = calculateTime(audioPlayer.duration);
+    }
+	}
+setInterval(updatebar, 100);
+
+seekbar.oninput = function() {
+  audioPlayer.currentTime = seekbar.value/100;
 }
 
 function random(max) {
@@ -137,6 +199,11 @@ function playaudio(i) {
         i = audiolinks.length-1;
     }
     playmem(i);
+    const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
+    var albumimage = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cib-apple-music_%28CoreUI_Icons_v1.0.0%29.svg/240px-Cib-apple-music_%28CoreUI_Icons_v1.0.0%29.svg.png";
+    //if (imagelinks[audiofolder]) {
+    //    albumimage = [imagelinks[audiofolder][0][1], imagelinks[audiofolder][0][2]];
+    //}
     audioSource.src = audiolinks[i][1];
     audioPlayer.load();
     audioPlayer.play().then(_ => { 
@@ -145,12 +212,7 @@ function playaudio(i) {
             navigator.mediaSession.metadata = new MediaMetadata({
             title: audiolinks[i][0].split("/").pop(),
             artwork: [
-                { src: 'https://dummyimage.com/96x96',   sizes: '96x96',   type: 'image/png' },
-                { src: 'https://dummyimage.com/128x128', sizes: '128x128', type: 'image/png' },
-                { src: 'https://dummyimage.com/192x192', sizes: '192x192', type: 'image/png' },
-                { src: 'https://dummyimage.com/256x256', sizes: '256x256', type: 'image/png' },
-                { src: 'https://dummyimage.com/384x384', sizes: '384x384', type: 'image/png' },
-                { src: 'https://dummyimage.com/512x512', sizes: '512x512', type: 'image/png' },
+                { src: albumimage, type: "image/png" },
             ]
             });
             
@@ -163,8 +225,8 @@ function playaudio(i) {
         ['previoustrack', () => { media("prev"); }],
         ['nexttrack',     () => { media("next"); }],
         ['stop',          () => { audioPlayer.pause();audioPlayer.currentTime = 0; }],
-        ['seekbackward',  (details) => { audioPlayer.currentTime = audioPlayer.currentTime-(details.seekOffset || 10); }],
-        ['seekforward',   (details) => { audioPlayer.currentTime = audioPlayer.currentTime+(details.seekOffset || 10); }],
+        //['seekbackward',  (details) => { audioPlayer.currentTime = audioPlayer.currentTime-(details.seekOffset || 10); }],
+        //['seekforward',   (details) => { audioPlayer.currentTime = audioPlayer.currentTime+(details.seekOffset || 10); }],
         ['seekto',        (details) => { 
             if (details.fastSeek && 'fastSeek' in audioPlayer) {
                 audioPlayer.fastSeek(details.seekTime);
@@ -213,8 +275,13 @@ filepicker.addEventListener('change', (event) => {
     var newfiles = Object.values(files).sort((a, b) => b.webkitRelativePath.split("/").length - a.webkitRelativePath.split("/").length);
   	for (let i = 0; i < newfiles.length; i++) {
         const file = newfiles[i];
-        if (file.type.startsWith("image") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
-            console.log(file.webkitRelativePath);
+        var imagesplit = file.webkitRelativePath.split("/");
+        if (file.type.startsWith("image/") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
+            var imgfolder = imagesplit[imagesplit.length-2];
+            if (!imagelinks[imgfolder]) {
+                imagelinks[imgfolder] = [];
+            }
+            imagelinks[imgfolder].push([file.webkitRelativePath, URL.createObjectURL(file), file.type]);
         }
         if (file.type.startsWith("audio") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
             const filesplit = file.webkitRelativePath.split("/");
@@ -233,9 +300,12 @@ filepicker.addEventListener('change', (event) => {
                     var folderdiv = document.createElement("div");
                     folderdiv.id = filesplit[i];
                     folderdiv.className = "folder";
-                    var foldername = document.createElement("p");
+                    var folderimg = document.createElement("img");
+                    var foldername = document.createElement("div");
                     foldername.innerText = filesplit[i];
                     foldername.setAttribute("onclick", "hideshow('f"+filesplit[i]+"')");
+                    folderimg.id = filesplit[i]+"img";
+                    foldername.appendChild(folderimg);
                     folderdiv.appendChild(foldername);
                     if (i == 0) {
                         parent.appendChild(folderdiv);
@@ -256,9 +326,13 @@ filepicker.addEventListener('change', (event) => {
             }
         }
 	}
+    for (let i = 0; i < document.getElementsByTagName("img").length; i++) { 
+        let id = document.getElementsByTagName("img")[i].id.slice(0,-3);
+        if (imagelinks[id]) {
+            document.getElementsByTagName("img")[i].src = imagelinks[id][0][1];
+        }
+    }
 });
-
-
 </script>
 
 </body>
