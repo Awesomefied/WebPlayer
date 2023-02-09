@@ -194,7 +194,38 @@ function hideshow(id) {
     }
 }
 
-function playaudio(i) {
+async function blob64(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function scaleimage(url, width, height) {
+    var imgDataUrl = await blob64(url);
+    var img = new Image();
+    img.src = imgDataUrl;
+
+    return new Promise((resolve, reject) => {
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL());
+      };
+      img.onerror = reject;
+    });
+}
+
+async function playaudio(i) {
     if (i > audiolinks.length-1) {
         i = 0;
     }
@@ -203,9 +234,11 @@ function playaudio(i) {
     }
     playmem(i);
     const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
-    var albumimage = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cib-apple-music_%28CoreUI_Icons_v1.0.0%29.svg/240px-Cib-apple-music_%28CoreUI_Icons_v1.0.0%29.svg.png";
+    var albumimage = [];
     if (imagelinks[audiofolder]) {
-        albumimage = [imagelinks[audiofolder][0][1], imagelinks[audiofolder][0][2]];
+        albumimage = [
+            { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
+        ]//[imagelinks[audiofolder][0][1], imagelinks[audiofolder][0][2]];
     }
     audioSource.src = audiolinks[i][1];
     audioPlayer.load();
@@ -214,9 +247,7 @@ function playaudio(i) {
 
             navigator.mediaSession.metadata = new MediaMetadata({
             title: audiolinks[i][0].split("/").pop(),
-            artwork: [
-                { src: albumimage, type: "image/png" },
-            ]
+            artwork: albumimage
             });
             
         }
