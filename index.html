@@ -250,6 +250,8 @@ async function playaudio(i) {
 
             navigator.mediaSession.metadata = new MediaMetadata({
             title: audiolinks[i][0].split("/").pop(),
+	    artist: '',
+      	    album: '',
             artwork: albumimage,
             });
             
