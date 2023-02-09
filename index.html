@@ -201,9 +201,9 @@ function playaudio(i) {
     playmem(i);
     const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
     var albumimage = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cib-apple-music_%28CoreUI_Icons_v1.0.0%29.svg/240px-Cib-apple-music_%28CoreUI_Icons_v1.0.0%29.svg.png";
-    //if (imagelinks[audiofolder]) {
-    //    albumimage = [imagelinks[audiofolder][0][1], imagelinks[audiofolder][0][2]];
-    //}
+    if (imagelinks[audiofolder]) {
+        albumimage = [imagelinks[audiofolder][0][1], imagelinks[audiofolder][0][2]];
+    }
     audioSource.src = audiolinks[i][1];
     audioPlayer.load();
     audioPlayer.play().then(_ => { 
