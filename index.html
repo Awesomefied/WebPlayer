@@ -38,14 +38,20 @@ img {
     background-color: #fbfbfb;
     box-shadow: 0px 0px 10px #848484;
     justify-content: center;
+    gap: 20px;
+    padding: 25px;
+    align-content: center;
 }
 .audioblock {
     width: 100%;
-    gap: 20px;
-    padding: 25px;
     justify-content: center;
     box-sizing: border-box;
     display: grid;
+}
+.infoblock {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 .sliderdiv {
     gap: 25px;
@@ -64,6 +70,10 @@ img {
 </div>
 
 <div class="mediabar" id="mediabar" style="display:none;">
+    <div class="infoblock">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" style="width: 60px;height: auto;">
+	<p>Song_name_here.mp3</p>    
+    </div>
     <div class="audioblock">
 	    <div class="sliderdiv">
 		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
@@ -251,7 +261,7 @@ async function scaleimage(url, width, height) {
 
 async function playaudio(i) {
     if (mediabar.style.display == "none") {
-    	mediabar.style.display = "block";
+    	mediabar.style.display = "flex";
     }
     if (i > audiolinks.length-1) {
         i = 0;
