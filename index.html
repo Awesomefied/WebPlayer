@@ -53,7 +53,10 @@ img {
 </head>
 <body>
 
-<input type="file" id="filepicker" name="fileList" webkitdirectory directory multiple />
+<div style="text-align: center;">
+    <input type="file" id="filepicker" name="fileList" webkitdirectory directory multiple />
+</div>
+
 <div class="mediabar" id="mediabar" style="display:none;">
     <div class="sliderdiv">
         <button id="shuffle" onclick="media('shuffle');">shuffle</button>
@@ -72,12 +75,9 @@ img {
     </div>
 </div>
 <div id="folders"></div>
+<div style="height: 116px;"></div>
 	
 <script>
-var offset = document.createElement("div");
-offset.style.height = document.getElementById("mediabar").offsetHeight+"px";
-document.body.appendChild(offset); 
-
 const folders = document.getElementById('folders');
 const filepicker = document.getElementById('filepicker');
 var audiolinks = [];
