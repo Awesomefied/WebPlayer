@@ -40,6 +40,7 @@ img {
     box-shadow: 0px 0px 10px #848484;
     justify-content: center;
     box-sizing: border-box;
+    display: none;
 }
 .sliderdiv {
     gap: 25px;
@@ -95,6 +96,7 @@ const previousbtn = document.querySelector("#previous");
 const nextbtn = document.querySelector("#next");
 const playpausebtn = document.querySelector("#playpause");
 const seekbar = document.querySelector("#seekbar");
+const mediabar = document.querySelector("#mediabar");
 
 function stopclick() {
     if (!e) var e = window.event;
@@ -241,6 +243,9 @@ async function scaleimage(url, width, height) {
 }
 
 async function playaudio(i) {
+    if (mediabar.style.display == "" || mediabar.style.display == "none") {
+    	mediabar.style.display = "block";
+    }
     if (i > audiolinks.length-1) {
         i = 0;
     }
