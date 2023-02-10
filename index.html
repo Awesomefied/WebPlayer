@@ -72,9 +72,12 @@ img {
     </div>
 </div>
 <div id="folders"></div>
-<br><br><br><br><br><br>
 	
 <script>
+var offset = document.createElement("div");
+offset.style.height = document.getElementById("mediabar").offsetHeight+"px";
+document.body.appendChild(offset); 
+
 const folders = document.getElementById('folders');
 const filepicker = document.getElementById('filepicker');
 var audiolinks = [];
