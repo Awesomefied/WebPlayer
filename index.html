@@ -34,13 +34,17 @@ img {
     width: 100%;
     bottom: 0;
     left: 0;
-    gap: 20px;
-    padding: 25px;
-    display: grid;
     background-color: #fbfbfb;
     box-shadow: 0px 0px 10px #848484;
     justify-content: center;
+}
+.audioblock {
+    width: 100%;
+    gap: 20px;
+    padding: 25px;
+    justify-content: center;
     box-sizing: border-box;
+    display: grid;
 }
 .sliderdiv {
     gap: 25px;
@@ -59,20 +63,22 @@ img {
 </div>
 
 <div class="mediabar" id="mediabar" style="display:none;">
-    <div class="sliderdiv">
-        <button id="shuffle" onclick="media('shuffle');">shuffle</button>
-        <button id="previous" onclick="media('prev')">prev</button>
-        <button id="playpause" onclick="media('play')">play</button>
-        <button id="next" onclick="media('next')">next</button>
-        <button id="loop" onclick="media('loop');">loop</button>
-    </div>
-    <div class="sliderdiv">
-        <div id="time">0:00</div>
-        <input type="range" min="0" max="100" value="0" class="slider" id="seekbar">
-        <div id="time2">0:00</div>
-        <audio id="audioPlayer">
-            <source id="audioSource" type="audio/mpeg">
-        </audio>
+    <div class="audioblock">
+	    <div class="sliderdiv">
+		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
+		<button id="previous" onclick="media('prev')">prev</button>
+		<button id="playpause" onclick="media('play')">play</button>
+		<button id="next" onclick="media('next')">next</button>
+		<button id="loop" onclick="media('loop');">loop</button>
+	    </div>
+	    <div class="sliderdiv">
+		<div id="time">0:00</div>
+		<input type="range" min="0" max="100" value="0" class="slider" id="seekbar">
+		<div id="time2">0:00</div>
+		<audio id="audioPlayer">
+		    <source id="audioSource" type="audio/mpeg">
+		</audio>
+	    </div>
     </div>
 </div>
 <div id="folders"></div>
@@ -244,7 +250,7 @@ async function scaleimage(url, width, height) {
 
 async function playaudio(i) {
     if (mediabar.style.display == "none") {
-    	mediabar.style.display = "grid";
+    	mediabar.style.display = "block";
     }
     if (i > audiolinks.length-1) {
         i = 0;
