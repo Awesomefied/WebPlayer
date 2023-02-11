@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="./images/icon.png">
 <title>Music Player Online</title>
 <style>
 body {
@@ -294,8 +295,8 @@ async function playaudio(i) {
     }
     playmem(i);
     const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
-    var albumimage = [];
-    infoimg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg";
+    var albumimage = [ { src: './images/icon.png', sizes: '256x256', type: 'image/png'];
+    infoimg.src = "./images/icon.png";
     if (imagelinks[audiofolder]) {
         albumimage = [
             { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
