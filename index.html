@@ -240,6 +240,20 @@ function hideshow(id) {
     }
 }
 
+function focus(id) {
+    var node = document.getElementById(id);
+    while (true) { 
+        if (node.parentNode.id == "folders") {
+	    break;
+	}
+	if (node.parentNode.style != "" || node.parentNode.style.display != "block") {
+	    node.parentNode.style.display = "block";
+	}
+	node = node.parentNode;
+    }
+    window.location.hash = '#'+id;
+}
+	
 function base64ToBlob(base64) {
   const byteString = atob(base64.split(',')[1]);
   const mimeString = base64.split(',')[0].split(':')[1].split(';')[0];
