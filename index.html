@@ -76,7 +76,7 @@ img {
 </div>
 
 <div class="mediabar" id="mediabar" style="display:none;">
-    <div class="infoblock" id="infoblock">
+    <div onclick="focus();" class="infoblock" id="infoblock">
         <img src="" id="infoimg" style="width: 60px;height: auto;">
 	<p id="infoname"></p>    
     </div>
@@ -240,8 +240,8 @@ function hideshow(id) {
     }
 }
 
-function focus(id) {
-    var node = document.getElementById(id);
+function focus() {
+    var node = document.getElementById(audiolinks[lastplayed][0]);
     while (true) { 
         if (node.parentNode.id == "folders") {
 	    break;
