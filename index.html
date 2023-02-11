@@ -76,8 +76,8 @@ img {
 
 <div class="mediabar" id="mediabar" style="display:none;">
     <div class="infoblock" id="infoblock">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" style="width: 60px;height: auto;">
-	<p>Song_name_here.mp3</p>    
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" id="infoimg" style="width: 60px;height: auto;">
+	<p id="infoname">Song_name_here.mp3</p>    
     </div>
     <div class="audioblock">
 	    <div class="sliderdiv">
@@ -121,6 +121,8 @@ const playpausebtn = document.querySelector("#playpause");
 const seekbar = document.querySelector("#seekbar");
 const mediabar = document.querySelector("#mediabar");
 const infoblock = document.getElementById("infoblock");
+const infoimg = document.getElementById("infoimg");
+const infoname = document.getElementById("infoname");
 const volumeblock = document.getElementById("volumeblock");
 	
 function resize() {
@@ -297,11 +299,12 @@ async function playaudio(i) {
         albumimage = [
             { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
         ];
-	console.log(albumimage[0].src);
 	//albumimage = [
         //    { src: imagelinks[audiofolder][0][1], type: 'image/png' },
         //]
     }
+    infoimg.src = albumimage[0].src;
+    infoname = audiolinks[i][0].split("/").pop();
     audioSource.src = audiolinks[i][1];
     audioPlayer.load();
     audioPlayer.play().then(_ => { 
@@ -347,7 +350,6 @@ async function playaudio(i) {
     }
     document.getElementById(audiolinks[i][0]).style.color = "#009b00";
     lastplayed = i;
-    console.log(prev);
 }
 
 audioPlayer.addEventListener("ended", function() {
