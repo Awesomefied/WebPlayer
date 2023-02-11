@@ -122,8 +122,8 @@ const infoblock = document.getElementById("infoblock");
 const volumeblock = document.getElementById("volumeblock");
 	
 function resize() {
-	if (window.innerWidth > window.innerHeight) {
-		infoblock.style.display = "";
+    if (document.getElementById("mediabar").offsetWidth < 846) {
+	infoblock.style.display = "";
         volumeblock.style.display = "";
     } else {
     	infoblock.style.display = "none";
@@ -151,7 +151,7 @@ function updatebar() {
       seekbar.max = Math.floor(audioPlayer.duration*100);
     }
     if (seekbar.value != Math.floor(audioPlayer.currentTime*100)) {
-		  seekbar.value = Math.floor(audioPlayer.currentTime*100);
+      seekbar.value = Math.floor(audioPlayer.currentTime*100);
     }
     
     if (document.getElementById("time").innerText != calculateTime(Math.floor(audioPlayer.currentTime))) {
