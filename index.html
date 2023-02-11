@@ -76,8 +76,8 @@ img {
 
 <div class="mediabar" id="mediabar" style="display:none;">
     <div class="infoblock" id="infoblock">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" id="infoimg" style="width: 60px;height: auto;">
-	<p id="infoname">Song_name_here.mp3</p>    
+        <img src="" id="infoimg" style="width: 60px;height: auto;">
+	<p id="infoname"></p>    
     </div>
     <div class="audioblock">
 	    <div class="sliderdiv">
@@ -295,6 +295,7 @@ async function playaudio(i) {
     playmem(i);
     const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
     var albumimage = [];
+    infoimg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg";
     if (imagelinks[audiofolder]) {
         albumimage = [
             { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
