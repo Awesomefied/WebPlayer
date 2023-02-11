@@ -296,7 +296,6 @@ async function playaudio(i) {
     playmem(i);
     const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
     var albumimage = [ { src: './images/icon.png', sizes: '256x256', type: 'image/png' } ];
-    infoimg.src = "./images/icon.png";
     if (imagelinks[audiofolder]) {
         albumimage = [
             { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
@@ -305,6 +304,8 @@ async function playaudio(i) {
 	//albumimage = [
         //    { src: imagelinks[audiofolder][0][1], type: 'image/png' },
         //]
+    } else {
+        infoimg.src = "./images/icon.png";
     }
     infoname.innerText = audiolinks[i][0].split("/").pop();
     audioSource.src = audiolinks[i][1];
