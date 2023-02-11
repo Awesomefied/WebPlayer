@@ -122,7 +122,7 @@ const infoblock = document.getElementById("infoblock");
 const volumeblock = document.getElementById("volumeblock");
 	
 function resize() {
-    if (document.getElementById("mediabar").offsetWidth < 846) {
+    if (document.getElementById("mediabar").offsetWidth > 846) {
 	infoblock.style.display = "";
         volumeblock.style.display = "";
     } else {
