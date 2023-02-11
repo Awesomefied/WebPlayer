@@ -130,7 +130,7 @@ function resize() {
     	volumeblock.style.display = "none";
     }
 }
-resize()
+resize();
 window.onresize = resize;
 	
 function stopclick() {
@@ -279,7 +279,8 @@ async function scaleimage(url, width, height) {
 
 async function playaudio(i) {
     if (mediabar.style.display == "none") {
-    	mediabar.style.display = "flex";
+    	mediabar.style.display = "";
+	resize();
     }
     if (i > audiolinks.length-1) {
         i = 0;
