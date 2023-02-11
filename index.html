@@ -295,7 +295,7 @@ async function playaudio(i) {
     var albumimage = [];
     if (imagelinks[audiofolder]) {
         albumimage = [
-            { src: base64ToBlob(await scaleimage(imagelinks[audiofolder][0][1], 256, 256)), sizes: '256x256', type: 'image/png' },
+            { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
         ];
 	console.log(albumimage[0].src);
 	//albumimage = [
