@@ -59,6 +59,10 @@ img {
     gap: 15px;
     padding-left: 25px;
 }
+.volumeblock {
+    width:100%;
+    display:flex;
+}
 .sliderdiv {
     gap: 25px;
     display: flex;
@@ -97,7 +101,9 @@ img {
 		</audio>
 	    </div>
     </div>
-    <div style="width:100%;" id="volumeblock"></div>
+    <div class="volumeblock" id="volumeblock">
+        <input type="range" min="0" max="100" value="100" class="slider" id="volbar">
+    </div>
 </div>
 <div id="folders"></div>
 <div style="height: 116px;"></div>
@@ -125,6 +131,7 @@ const infoblock = document.getElementById("infoblock");
 const infoimg = document.getElementById("infoimg");
 const infoname = document.getElementById("infoname");
 const volumeblock = document.getElementById("volumeblock");
+const volbar = document.getElementById("volbar");
 	
 function resize() {
     if (document.getElementById("mediabar").offsetWidth > 846) {
@@ -170,6 +177,10 @@ setInterval(updatebar, 100);
 
 seekbar.oninput = function() {
   audioPlayer.currentTime = seekbar.value/100;
+}
+
+volbar.oninput = function() {
+  audioPlayer.volume = volbar.value/100;
 }
 
 function random(max) {
