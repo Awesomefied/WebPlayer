@@ -304,7 +304,7 @@ async function playaudio(i) {
         //    { src: imagelinks[audiofolder][0][1], type: 'image/png' },
         //]
     }
-    infoname = audiolinks[i][0].split("/").pop();
+    infoname.innerText = audiolinks[i][0].split("/").pop();
     audioSource.src = audiolinks[i][1];
     audioPlayer.load();
     audioPlayer.play().then(_ => { 
