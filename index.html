@@ -76,7 +76,7 @@ img {
 </div>
 
 <div class="mediabar" id="mediabar" style="display:none;">
-    <div onclick="focus();" class="infoblock" id="infoblock">
+    <div class="infoblock" id="infoblock">
         <img src="" id="infoimg" style="width: 60px;height: auto;">
 	<p id="infoname"></p>    
     </div>
@@ -254,6 +254,7 @@ function focus() {
     }
     window.location.hash = '#'+audiolinks[lastplayed][0];
 }
+infoname.onclick = focus;
 	
 function base64ToBlob(base64) {
   const byteString = atob(base64.split(',')[1]);
