@@ -49,8 +49,11 @@ img {
 .audioblock {
     width: 100%;
     justify-content: center;
-    box-sizing: border-box;
     display: grid;
+    gap: 0px;
+    padding: 0px;
+    margin: 0px;
+    grid-template-columns: 1fr;
 }
 .infoblock {
     width: 100%;
@@ -63,11 +66,13 @@ img {
     width:100%;
     display:flex;
     padding-right: 25px;
+    justify-content: right;
 }
 .sliderdiv {
     gap: 25px;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 .slider {
     width: 100%;
@@ -103,7 +108,7 @@ img {
 	    </div>
     </div>
     <div class="volumeblock" id="volumeblock">
-        <input type="range" min="0" max="100" value="100" class="slider" id="volbar">
+        <input type="range" min="0" max="100" value="100" style="width:50%" class="slider" id="volbar">
     </div>
 </div>
 <div id="folders"></div>
