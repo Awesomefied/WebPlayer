@@ -90,7 +90,7 @@ img {
         <img src="" id="infoimg" style="width: 60px;height: auto;">
 	<p id="infoname"></p>    
     </div>
-    <div class="audioblock">
+    <div class="audioblock" id="audioblock">
 	    <div class="sliderdiv">
 		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
 		<button id="previous" onclick="media('prev')">prev</button>
@@ -136,6 +136,7 @@ const mediabar = document.querySelector("#mediabar");
 const infoblock = document.getElementById("infoblock");
 const infoimg = document.getElementById("infoimg");
 const infoname = document.getElementById("infoname");
+const audioblock = document.getElementById("audioblock");
 const volumeblock = document.getElementById("volumeblock");
 const volbar = document.getElementById("volbar");
 	
@@ -143,9 +144,12 @@ function resize() {
     if (document.getElementById("mediabar").offsetWidth > 846) {
 	infoblock.style.display = "";
         volumeblock.style.display = "";
+	audioblock.style = "";
     } else {
     	infoblock.style.display = "none";
     	volumeblock.style.display = "none";
+	audioblock.style.paddingLeft = "25px";
+	audioblock.style.paddingRight = "25px";
     }
 }
 resize();
@@ -258,7 +262,6 @@ function hideshow(id) {
 }
 
 function focus() {
-    console.log("CODE PLEEEEASE WORK PLEASE I AM BEGGING");
     var node = document.getElementById(audiolinks[lastplayed][0]);
     for (let i = 0; i < 20; i++) { 
         if (node.parentNode.id == "folders") {
