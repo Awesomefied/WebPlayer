@@ -442,7 +442,7 @@ filepicker.addEventListener('change', (event) => {
                     var folderimg = document.createElement("img");
                     var foldername = document.createElement("div");
                     foldername.innerText = filesplit[i];
-                    foldername.setAttribute("onclick", "hideshow('f"+filesplit[i]+"')");
+                    foldername.setAttribute("onclick", 'hideshow("f'+filesplit[i]+'")');
                     folderimg.id = filesplit[i]+"img";
                     foldername.appendChild(folderimg);
                     folderdiv.appendChild(foldername);
