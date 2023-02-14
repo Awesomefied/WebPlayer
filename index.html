@@ -111,6 +111,12 @@ img {
     cursor: pointer;
     display: flex;
 }
+.mobilebtn {
+    display: none;
+    position: absolute;
+    right: 8%;
+    bottom: 90px;
+}
 </style>
 </head>
 <body>
@@ -156,6 +162,7 @@ img {
     <div class="volumeblock" id="volumeblock">
         <input type="range" min="0" max="100" value="100" style="width:50%" class="slider" id="volbar">
     </div>
+    <div id="mobilebtn" class="mobilebtn" onclick="mobile();">^</div>
 </div>
 <div id="folders"></div>
 <div style="height: 390px;"></div>
@@ -185,6 +192,7 @@ const infoname = document.getElementById("infoname");
 const audioblock = document.getElementById("audioblock");
 const volumeblock = document.getElementById("volumeblock");
 const volbar = document.getElementById("volbar");
+const mediabtn = document.getElementById("mediabtn");
 	
 function resize() {
     if (mediabar.offsetWidth > 846 || mediabar.style.height == "100%") {
@@ -192,17 +200,52 @@ function resize() {
         volumeblock.style.display = "";
 	if (mediabar.style.height != "100%") {
 	    audioblock.style = "";
+	    mediabtn.style = "";
 	}
     } else {
     	infoblock.style.display = "none";
     	volumeblock.style.display = "none";
 	audioblock.style.paddingLeft = "25px";
 	audioblock.style.paddingRight = "25px";
+	mediabtn.style.display = "block";
     }
 }
 resize();
 window.onresize = resize;
 	
+function mobile() {
+    if (mediabar.style.height != "100%") {
+	mobilebtn.innerText = "v";
+	mobilebtn.style.bottom = "85%";
+        volumeblock.style = "";
+	infoblock.style = "";
+	audioblock.style.paddingLeft = "25px";
+	audioblock.style.paddingRight = "25px";
+	audioblock.style.width = "auto";
+	mediabar.style.height = "100%";
+	mediabar.style.flexDirection = "column";
+	infoblock.style.flexDirection = "column";
+	infoblock.style.paddingLeft = "0";
+	infoimg.style.width = "90%";
+	infoimg.style.height = "auto";
+	infoimg.style.borderRadius = "3%";
+	volumeblock.style.justifyContent = "center";
+	infoname.style.textAlign = "center";
+    } else {
+	mobilebtn.innerText = "^";
+	mobilebtn.style = "";
+	mobilebtn.style = "";
+        volumeblock.style = "";
+	infoblock.style = "";
+	audioblock.style = "";
+	mediabar.style = "";
+	infoimg.style = "";
+	infoimg.style.width = "60px";
+	infoimg.style.height = "auto";
+	infoname.style = "";
+	resize();
+    }
+}
 function stopclick() {
     if (!e) var e = window.event;
     e.cancelBubble = true;
