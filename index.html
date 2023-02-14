@@ -141,7 +141,7 @@ const volumeblock = document.getElementById("volumeblock");
 const volbar = document.getElementById("volbar");
 	
 function resize() {
-    if (document.getElementById("mediabar").offsetWidth > 846) {
+    if (mediabar.offsetWidth > 846 && mediabar.style.height != "100%") {
 	infoblock.style.display = "";
         volumeblock.style.display = "";
 	audioblock.style = "";
