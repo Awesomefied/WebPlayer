@@ -86,6 +86,28 @@ img {
 .slider {
     width: 100%;
 }
+.triright {
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-left: 19px solid black;
+  border-bottom: 11px solid transparent;
+}
+.trileft {
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 19px solid black;
+  border-bottom: 11px solid transparent;
+}
+.rectangle {
+  height: 22px;
+  width: 6px;
+  background-color: black;
+}
+.skip {
+	display: flex;
+}
 </style>
 </head>
 <body>
@@ -102,9 +124,15 @@ img {
     <div class="audioblock" id="audioblock">
 	    <div class="sliderdiv">
 		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
-		<button id="previous" onclick="media('prev')">prev</button>
+		<div id="previous" class="skip" onclick="media('prev')">
+		    <div class="rectangle"></div>
+                    <div class="trileft"></div>   
+		</div>
 		<button id="playpause" class="playpause" onclick="media('play')">play</button>
-		<button id="next" onclick="media('next')">next</button>
+		<div id="next" class="skip" onclick="media('next')">
+                    <div class="triright"></div>
+                    <div class="rectangle"></div>
+                </div>
 		<button id="loop" onclick="media('loop');">loop</button>
 	    </div>
 	    <div class="sliderdiv">
