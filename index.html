@@ -448,13 +448,13 @@ audioPlayer.addEventListener("ended", function() {
 });
 
 audioPlayer.addEventListener("play", function() {
-    document.getElementById("play").display = "none";
-    document.getElementById("pause").display = "block";
+    document.getElementById("play").style.display = "none";
+    document.getElementById("pause").style.display = "block";
 });
 
 audioPlayer.addEventListener("pause", function() {
-    document.getElementById("pause").display = "none";
-    document.getElementById("play").display = "block";
+    document.getElementById("pause").style.display = "none";
+    document.getElementById("play").style.display = "block";
 });
 
 filepicker.addEventListener('change', (event) => {
