@@ -129,7 +129,13 @@ img {
 		    <div class="rectangle"></div>
                     <div class="trileft"></div>   
 		</div>
-		<button id="playpause" class="playpause" onclick="media('play')">play</button>
+		<button id="playpause" class="playpause" onclick="media('play')">
+		    <div id="play" class="triright"></div>
+		    <svg id="pause" x="0px" y="0px" viewBox="0 0 300 374" enable-background="new 0 0 300 374" width="19px" style="display: none;">
+                        <path fill="#000000" opacity="1" stroke="none" d=" M113.000000,375.000000   C75.693993,375.000000 38.387989,375.000000 1.040992,375.000000   C1.040992,250.451935 1.040992,125.903839 1.040992,1.000000   C38.020134,1.000000 75.041412,1.000000 112.531342,1.468657   C113.000000,126.291542 113.000000,250.645767 113.000000,375.000000  z"></path>
+                        <path fill="#000000" opacity="1" stroke="none" d=" M189.000000,1.000000   C226.306015,1.000000 263.612030,1.000000 300.959015,1.000000   C300.959015,125.548073 300.959015,250.096161 300.959015,375.000000   C263.979858,375.000000 226.958588,375.000000 189.468658,374.531342   C189.000000,249.708450 189.000000,125.354225 189.000000,1.000000  z"></path>
+                    </svg>
+		</button>
 		<div id="next" class="skip" onclick="media('next')">
                     <div class="triright"></div>
                     <div class="rectangle"></div>
@@ -442,11 +448,13 @@ audioPlayer.addEventListener("ended", function() {
 });
 
 audioPlayer.addEventListener("play", function() {
-    playpausebtn.innerText = "pause";
+    document.getElementById("play").display = "none";
+    document.getElementById("pause").display = "block";
 });
 
 audioPlayer.addEventListener("pause", function() {
-    playpausebtn.innerText = "play";
+    document.getElementById("pause").display = "none";
+    document.getElementById("play").display = "block";
 });
 
 filepicker.addEventListener('change', (event) => {
