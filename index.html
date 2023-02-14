@@ -436,6 +436,7 @@ async function playaudio(i) {
     for (let n = 0; i < audiolinks[i][0].split("/").length-1; n++) { 
 	if (imagelinks[audiolinks[i][0].split("/")[n]]) {
 		audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/")[n]];
+		console.log(audiofolder);
 	}
     }
     if (audiofolder != "") {
