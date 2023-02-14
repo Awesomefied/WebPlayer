@@ -221,7 +221,8 @@ function mobile() {
     if (mediabar.style.height != "100%") {
 	document.body.style.overflow = "visible";
 	mobilebtn.innerText = "v";
-	mobilebtn.style.bottom = "85%";
+	mobilebtn.style.bottom = "0";
+	mobilebtn.style.top = "6%";
         volumeblock.style = "";
 	infoblock.style = "";
 	audioblock.style.paddingLeft = "25px";
@@ -229,6 +230,7 @@ function mobile() {
 	audioblock.style.width = "auto";
 	mediabar.style.height = "100%";
 	mediabar.style.flexDirection = "column";
+	mediabar.style.padding = "0px";
 	infoblock.style.flexDirection = "column";
 	infoblock.style.paddingLeft = "0";
 	infoimg.style.width = "90%";
