@@ -112,6 +112,7 @@ img {
     display: flex;
 }
 .mobilebtn {
+    cursor: pointer;
     display: none;
     position: absolute;
     right: 8%;
@@ -201,6 +202,8 @@ function resize() {
 	if (mediabar.style.height != "100%") {
 	    audioblock.style = "";
 	    mobilebtn.style = "";
+	} else {
+	    mobile();
 	}
     } else {
     	infoblock.style.display = "none";
