@@ -182,7 +182,9 @@ function resize() {
     if (mediabar.offsetWidth > 846 || mediabar.style.height == "100%") {
 	infoblock.style.display = "";
         volumeblock.style.display = "";
-	audioblock.style = "";
+	if (mediabar.style.height != "100%") {
+	    audioblock.style = "";
+	}
     } else {
     	infoblock.style.display = "none";
     	volumeblock.style.display = "none";
