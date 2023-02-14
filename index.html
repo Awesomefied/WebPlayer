@@ -30,6 +30,15 @@ img {
     padding: 5px;
     background-color: #cecece;
 }
+.playpause {
+    border: #bdbdbd;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
 .mediabar {
     display: flex;
     position: fixed;
@@ -94,7 +103,7 @@ img {
 	    <div class="sliderdiv">
 		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
 		<button id="previous" onclick="media('prev')">prev</button>
-		<button id="playpause" onclick="media('play')">play</button>
+		<button id="playpause" class="playpause" onclick="media('play')">play</button>
 		<button id="next" onclick="media('next')">next</button>
 		<button id="loop" onclick="media('loop');">loop</button>
 	    </div>
