@@ -238,6 +238,7 @@ function mobile() {
 	volumeblock.style.justifyContent = "center";
 	infoname.style.textAlign = "center";
 	document.body.style.overflow = "hidden";
+	document.body.style.position = "fixed";
     } else {
 	mobilebtn.innerText = "^";
 	mobilebtn.style = "";
@@ -251,6 +252,7 @@ function mobile() {
 	infoimg.style.height = "auto";
 	infoname.style = "";
 	document.body.style.overflow = "visible";
+	document.body.style.position = "static";
 	resize();
     }
 }
