@@ -435,8 +435,7 @@ async function playaudio(i) {
     var albumimage = [ { src: './images/icon.png', sizes: '256x256', type: 'image/png' } ];
     for (let n = 0; n < audiolinks[i][0].split("/").length-1; n++) { 
 	if (imagelinks[audiolinks[i][0].split("/")[n]]) {
-		audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/")[n]];
-		console.log(audiofolder);
+		audiofolder = audiolinks[i][0].split("/")[n];
 	}
     }
     if (audiofolder != "") {
