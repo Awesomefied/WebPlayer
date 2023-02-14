@@ -219,7 +219,6 @@ window.onresize = resize;
 	
 function mobile() {
     if (mediabar.style.height != "100%") {
-	document.body.style.overflow = "visible";
 	mobilebtn.innerText = "v";
 	mobilebtn.style.bottom = "0";
 	mobilebtn.style.top = "6%";
@@ -238,8 +237,8 @@ function mobile() {
 	infoimg.style.borderRadius = "3%";
 	volumeblock.style.justifyContent = "center";
 	infoname.style.textAlign = "center";
-    } else {
 	document.body.style.overflow = "hidden";
+    } else {
 	mobilebtn.innerText = "^";
 	mobilebtn.style = "";
 	mobilebtn.style = "";
@@ -251,6 +250,7 @@ function mobile() {
 	infoimg.style.width = "60px";
 	infoimg.style.height = "auto";
 	infoname.style = "";
+	document.body.style.overflow = "visible";
 	resize();
     }
 }
