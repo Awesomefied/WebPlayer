@@ -192,7 +192,7 @@ const infoname = document.getElementById("infoname");
 const audioblock = document.getElementById("audioblock");
 const volumeblock = document.getElementById("volumeblock");
 const volbar = document.getElementById("volbar");
-const mediabtn = document.getElementById("mediabtn");
+const mobilebtn = document.getElementById("mobilebtn");
 	
 function resize() {
     if (mediabar.offsetWidth > 846 || mediabar.style.height == "100%") {
@@ -200,14 +200,14 @@ function resize() {
         volumeblock.style.display = "";
 	if (mediabar.style.height != "100%") {
 	    audioblock.style = "";
-	    mediabtn.style = "";
+	    mobilebtn.style = "";
 	}
     } else {
     	infoblock.style.display = "none";
     	volumeblock.style.display = "none";
 	audioblock.style.paddingLeft = "25px";
 	audioblock.style.paddingRight = "25px";
-	mediabtn.style.display = "block";
+	mobilebtn.style.display = "block";
     }
 }
 resize();
