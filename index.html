@@ -202,6 +202,7 @@ function resize() {
 	if (mediabar.style.height != "100%") {
 	    audioblock.style = "";
 	    mobilebtn.style = "";
+	} else if (media.offsetWidth > 846) {
 	    mobile();
 	}
     } else {
@@ -217,6 +218,7 @@ window.onresize = resize;
 	
 function mobile() {
     if (mediabar.style.height != "100%") {
+	document.body.style.overflow = "hidden";
 	mobilebtn.innerText = "v";
 	mobilebtn.style.bottom = "85%";
         volumeblock.style = "";
@@ -234,6 +236,7 @@ function mobile() {
 	volumeblock.style.justifyContent = "center";
 	infoname.style.textAlign = "center";
     } else {
+	document.body.style.overflow = "visable";
 	mobilebtn.innerText = "^";
 	mobilebtn.style = "";
 	mobilebtn.style = "";
