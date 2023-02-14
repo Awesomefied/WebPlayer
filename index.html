@@ -431,9 +431,14 @@ async function playaudio(i) {
         i = audiolinks.length-1;
     }
     playmem(i);
-    const audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/").length-2];
+    var audiofolder = "";
     var albumimage = [ { src: './images/icon.png', sizes: '256x256', type: 'image/png' } ];
-    if (imagelinks[audiofolder]) {
+    for (let n = 0; i < audiolinks[i][0].split("/").length-1; n++) { 
+	if (imagelinks[audiolinks[i][0].split("/")[n]]) {
+		audiofolder = audiolinks[i][0].split("/")[audiolinks[i][0].split("/")[n]];
+	}
+    }
+    if (audiofolder != "") {
 	infoimg.src = imagelinks[audiofolder][0][1];
         albumimage = [
             { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
