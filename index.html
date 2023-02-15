@@ -15,6 +15,7 @@ img {
     height: 18px;
     float: right;
     border-radius: 15%;
+    max-width: 440px;
 }
 .folder {
     margin: 10px;
@@ -114,9 +115,11 @@ img {
 .mobilebtn {
     cursor: pointer;
     display: none;
-    position: absolute;
-    right: 8%;
-    bottom: 90px;
+    text-align: center;
+    position: fixed;
+    right: 0px;
+    padding-right: 25px;
+    justify-content: right;
 }
 </style>
 </head>
@@ -127,23 +130,26 @@ img {
 </div>
 
 <div class="mediabar" id="mediabar" style="display:none;">
+    <div id="mobilebtn" class="mobilebtn">
+        <div id="mobiletext" onclick="mobile();" style="width: 15px;">^</div>
+    </div>
     <div class="infoblock" id="infoblock">
         <img src="" id="infoimg" style="width: 80px;height: auto;">
-	<p id="infoname"></p>    
+	    <p id="infoname"></p>    
     </div>
     <div class="audioblock" id="audioblock">
 	    <div class="sliderdiv" style="padding-bottom: 15px;">
 		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
 		<div id="previous" class="skip" onclick="media('prev')">
 		    <div class="rectangle"></div>
-                    <div class="trileft"></div>   
+            <div class="trileft"></div>   
 		</div>
 		<button id="playpause" class="playpause" onclick="media('play')">
 		    <div id="play" class="triright" style="left:2px;position:relative;"></div>
 		    <svg id="pause" x="0px" y="0px" viewBox="0 0 300 374" enable-background="new 0 0 300 374" width="19px" style="display: none;">
-                        <path fill="#000000" opacity="1" stroke="none" d=" M113.000000,375.000000   C75.693993,375.000000 38.387989,375.000000 1.040992,375.000000   C1.040992,250.451935 1.040992,125.903839 1.040992,1.000000   C38.020134,1.000000 75.041412,1.000000 112.531342,1.468657   C113.000000,126.291542 113.000000,250.645767 113.000000,375.000000  z"></path>
-                        <path fill="#000000" opacity="1" stroke="none" d=" M189.000000,1.000000   C226.306015,1.000000 263.612030,1.000000 300.959015,1.000000   C300.959015,125.548073 300.959015,250.096161 300.959015,375.000000   C263.979858,375.000000 226.958588,375.000000 189.468658,374.531342   C189.000000,249.708450 189.000000,125.354225 189.000000,1.000000  z"></path>
-                    </svg>
+                <path fill="#000000" opacity="1" stroke="none" d=" M113.000000,375.000000   C75.693993,375.000000 38.387989,375.000000 1.040992,375.000000   C1.040992,250.451935 1.040992,125.903839 1.040992,1.000000   C38.020134,1.000000 75.041412,1.000000 112.531342,1.468657   C113.000000,126.291542 113.000000,250.645767 113.000000,375.000000  z"></path>
+                <path fill="#000000" opacity="1" stroke="none" d=" M189.000000,1.000000   C226.306015,1.000000 263.612030,1.000000 300.959015,1.000000   C300.959015,125.548073 300.959015,250.096161 300.959015,375.000000   C263.979858,375.000000 226.958588,375.000000 189.468658,374.531342   C189.000000,249.708450 189.000000,125.354225 189.000000,1.000000  z"></path>
+            </svg>
 		</button>
 		<div id="next" class="skip" onclick="media('next')">
                     <div class="triright"></div>
@@ -194,24 +200,25 @@ const audioblock = document.getElementById("audioblock");
 const volumeblock = document.getElementById("volumeblock");
 const volbar = document.getElementById("volbar");
 const mobilebtn = document.getElementById("mobilebtn");
+const mobiletext = document.getElementById("mobiletext");
 	
 function resize() {
     if (mediabar.offsetWidth > 846 || mediabar.style.height == "100%") {
-	infoblock.style.display = "";
-        volumeblock.style.display = "";
+	    infoblock.style.display = "";
 	if (mediabar.offsetWidth > 846 && mediabar.style.height == "100%") {
 	    mobile();
 	}
 	if (mediabar.style.height != "100%") {
 	    audioblock.style = "";
 	    mobilebtn.style = "";
+        volumeblock.style.display = "";
 	}
     } else {
     	infoblock.style.display = "none";
     	volumeblock.style.display = "none";
-	audioblock.style.paddingLeft = "25px";
-	audioblock.style.paddingRight = "25px";
-	mobilebtn.style.display = "block";
+        audioblock.style.paddingLeft = "25px";
+        audioblock.style.paddingRight = "25px";
+        mobilebtn.style.display = "flex";
     }
 }
 resize();
@@ -219,40 +226,38 @@ window.onresize = resize;
 	
 function mobile() {
     if (mediabar.style.height != "100%") {
-	mobilebtn.innerText = "v";
-	mobilebtn.style.bottom = "0";
-	mobilebtn.style.top = "6%";
-	infoblock.style = "";
-	audioblock.style.paddingLeft = "25px";
-	audioblock.style.paddingRight = "25px";
-	audioblock.style.width = "auto";
-	mediabar.style.height = "100%";
-	mediabar.style.flexDirection = "column";
-	mediabar.style.padding = "0px";
-	infoblock.style.flexDirection = "column";
-	infoblock.style.paddingLeft = "0";
-	infoimg.style.width = "90%";
-	infoimg.style.height = "auto";
-	infoimg.style.borderRadius = "3%";
-	volumeblock.style.display = "none";
-	infoname.style.textAlign = "center";
-	document.body.style.overflow = "hidden";
-	document.body.style.position = "fixed";
+        mobiletext.innerText = "v";
+        mobilebtn.style.position = "static";
+        infoblock.style = "";
+        audioblock.style.paddingLeft = "25px";
+        audioblock.style.paddingRight = "25px";
+        audioblock.style.width = "auto";
+        mediabar.style.height = "100%";
+        mediabar.style.flexDirection = "column";
+        mediabar.style.padding = "0px";
+        infoblock.style.flexDirection = "column";
+        infoblock.style.paddingLeft = "0";
+        infoimg.style.width = "90%";
+        infoimg.style.height = "auto";
+        infoimg.style.borderRadius = "3%";
+        volumeblock.style.display = "none";
+        infoname.style.textAlign = "center";
+        document.body.style.overflow = "hidden";
+        document.body.style.position = "fixed";
     } else {
-	mobilebtn.innerText = "^";
-	mobilebtn.style = "";
-	mobilebtn.style = "";
+        mobiletext.innerText = "^";
+        mobilebtn.style = "";
         volumeblock.style = "";
-	infoblock.style = "";
-	audioblock.style = "";
-	mediabar.style = "";
-	infoimg.style = "";
-	infoimg.style.width = "80px";
-	infoimg.style.height = "auto";
-	infoname.style = "";
-	document.body.style.overflow = "visible";
-	document.body.style.position = "static";
-	resize();
+        infoblock.style = "";
+        audioblock.style = "";
+        mediabar.style = "";
+        infoimg.style = "";
+        infoimg.style.width = "80px";
+        infoimg.style.height = "auto";
+        infoname.style = "";
+        document.body.style.overflow = "visible";
+        document.body.style.position = "static";
+        resize();
     }
 }
 function stopclick() {
