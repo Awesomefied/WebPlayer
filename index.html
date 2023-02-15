@@ -349,8 +349,9 @@ function media(action) {
         }
     }
     if (action == "next") {
-        if (shuffle) { 
-            playaudio(random(audiolinks.length-1)); 
+        var rand = random(audiolinks.length-1);
+        if (shuffle && rand != lastplayed) { 
+            playaudio(rand); 
         } else { 
             playaudio(lastplayed+1) 
         } 
@@ -495,7 +496,10 @@ async function playaudio(i) {
     }
 
     for (let i = 0; i < document.getElementsByClassName("file").length; i++) { 
-        document.getElementsByClassName("file")[i].style = "";
+        if (document.getElementsByClassName("file")[i].style.color) {
+            document.getElementsByClassName("file")[i].style = "";
+            break;
+        }
     }
     document.getElementById(audiolinks[i][0]).style.color = "#009b00";
     lastplayed = i;
