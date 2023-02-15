@@ -128,11 +128,11 @@ img {
 
 <div class="mediabar" id="mediabar" style="display:none;">
     <div class="infoblock" id="infoblock">
-        <img src="" id="infoimg" style="width: 60px;height: auto;">
+        <img src="" id="infoimg" style="width: 80px;height: auto;">
 	<p id="infoname"></p>    
     </div>
     <div class="audioblock" id="audioblock">
-	    <div class="sliderdiv">
+	    <div class="sliderdiv" style="padding-bottom: 15px;">
 		<button id="shuffle" onclick="media('shuffle');">shuffle</button>
 		<div id="previous" class="skip" onclick="media('prev')">
 		    <div class="rectangle"></div>
@@ -248,7 +248,7 @@ function mobile() {
 	audioblock.style = "";
 	mediabar.style = "";
 	infoimg.style = "";
-	infoimg.style.width = "60px";
+	infoimg.style.width = "80px";
 	infoimg.style.height = "auto";
 	infoname.style = "";
 	document.body.style.overflow = "visible";
