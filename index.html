@@ -443,9 +443,9 @@ async function playaudio(i) {
 	}
     }
     if (audiofolder != "") {
-	infoimg.src = imagelinks[audiofolder][0][1];
+	infoimg.src = imagelinks[audiofolder][1][0][1];
         albumimage = [
-            { src: await scaleimage(imagelinks[audiofolder][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
+            { src: await scaleimage(imagelinks[audiofolder][1][0][1], 256, 256), sizes: '256x256', type: 'image/png' },
         ];
 	//albumimage = [
         //    { src: imagelinks[audiofolder][0][1], type: 'image/png' },
@@ -533,9 +533,9 @@ filepicker.addEventListener('change', (event) => {
         if (file.type.startsWith("image/") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
             var imgfolder = imagesplit[imagesplit.length-2];
             if (!imagelinks[imgfolder]) {
-                imagelinks[imgfolder] = [];
+                imagelinks[imgfolder] = [0,[]];
             }
-            imagelinks[imgfolder].push([file.webkitRelativePath, URL.createObjectURL(file), file.type]);
+            imagelinks[imgfolder][1].push([file.webkitRelativePath, URL.createObjectURL(file), file.type]);
         }
         if (file.type.startsWith("audio") && !file.webkitRelativePath.split("/").pop().startsWith(".")) {
             const filesplit = file.webkitRelativePath.split("/");
@@ -583,7 +583,7 @@ filepicker.addEventListener('change', (event) => {
     for (let i = 0; i < document.getElementsByTagName("img").length; i++) { 
         let id = document.getElementsByTagName("img")[i].id.slice(0,-3);
         if (imagelinks[id]) {
-            document.getElementsByTagName("img")[i].src = imagelinks[id][0][1];
+            document.getElementsByTagName("img")[i].src = imagelinks[id][1][0][1];
         }
     }
 });
