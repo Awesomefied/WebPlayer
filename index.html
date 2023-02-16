@@ -357,6 +357,21 @@ function media(action) {
     }
 }
 
+function changeimg(id) {
+	if (!imagelinks[id] || imagelinks[id][1].length <= 1) {
+		return;
+	}
+	if (imagelinks[id][0]+1 == imagelinks[id][1].length) {
+		imagelinks[id][0] = 0;
+	} else {
+		imagelinks[id][0] = imagelinks[id][0]+1;
+	}
+	if (infoimg.src == document.getElementById(id+"img").src) {
+		infoimg.src = imagelinks[id][1][imagelinks[id][0]][1];
+	}
+	document.getElementById(id+"img").src = imagelinks[id][1][imagelinks[id][0]][1];
+}
+	
 function hideshow(id) {
     var element = document.getElementById(id);
     if (element.style.display == "" || element.style.display == "none") {
@@ -557,8 +572,9 @@ filepicker.addEventListener('change', (event) => {
                     var folderimg = document.createElement("img");
                     var foldername = document.createElement("div");
                     foldername.innerText = filesplit[i];
-                    foldername.setAttribute("onclick", 'hideshow("f'+filesplit[i]+'")');
+                    foldername.setAttribute("onclick", `hideshow("f${filesplit[i]}")`);
                     folderimg.id = filesplit[i]+"img";
+					folderimg.setAttribute("onclick", `changeimg("${filesplit[i]}")`);
                     foldername.appendChild(folderimg);
                     folderdiv.appendChild(foldername);
                     if (i == 0) {
