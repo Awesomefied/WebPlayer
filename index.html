@@ -361,12 +361,15 @@ function changeimg(id) {
 	if (!imagelinks[id] || imagelinks[id][1].length <= 1) {
 		return;
 	}
+	stopclick();
 	if (imagelinks[id][0]+1 == imagelinks[id][1].length) {
 		imagelinks[id][0] = 0;
 	} else {
 		imagelinks[id][0] = imagelinks[id][0]+1;
 	}
-	if (infoimg.src == document.getElementById(id+"img").src) {
+	var links = "";
+	imagelinks[id][1].forEach(element => links += element[1]);
+	if (links.search(infoimg.src) != -1) {
 		infoimg.src = imagelinks[id][1][imagelinks[id][0]][1];
 	}
 	document.getElementById(id+"img").src = imagelinks[id][1][imagelinks[id][0]][1];
