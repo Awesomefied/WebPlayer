@@ -512,12 +512,7 @@ async function playaudio(i) {
         }
     }
 
-    for (let i = 0; i < document.getElementsByClassName("file").length; i++) { 
-        if (document.getElementsByClassName("file")[i].style.color) {
-            document.getElementsByClassName("file")[i].style = "";
-            break;
-        }
-    }
+	document.getElementById(audiolinks[lastplayed][0]).style = "";
     document.getElementById(audiolinks[i][0]).style.color = "#009b00";
     lastplayed = i;
 }
