@@ -271,7 +271,7 @@ function styletojson() {
 			const elements = style[i].split("{")[1].split(";").map(element => {
   				return element.trim();
 			});
-			json[style[i].split("{")[0]] = elements;
+			json[style[i].split("{")[0].trim()] = elements;
 		}
   	}
 	return json;
