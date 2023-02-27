@@ -15,8 +15,8 @@ img {
     height: 18px;
     float: right;
     border-radius: 15%;
-	max-width: 450px;
-	max-height: 450px;
+    max-width: 450px;
+    max-height: 450px;
 }
 .folder {
     margin: 10px;
@@ -291,6 +291,40 @@ function jsontostyle(json) {
 		style += keys[i]+"{"+elements+"}";
   	}
 	return style;
+}
+
+function theme() {
+	var sjson = styletojson();
+	if (sjson["body"].indexOf("background-color: white") != -1) {
+		console.log("lightmode");
+		sjson["body"][sjson["body"].indexOf("background-color: white")] = "background-color: black";
+		sjson["body"][sjson["body"].indexOf("color: black")] = "color: white";
+		sjson[".folder"][sjson[".folder"].indexOf("background-color: white")] = "background-color: black";
+		sjson[".folder"][sjson[".folder"].indexOf("border: 2px solid #cecece")] = "border: 2px solid #646464";
+		sjson[".file"][sjson[".file"].indexOf("background-color: #cecece")] = "background-color: #4a4a4a";
+		sjson[".mediabar"][sjson[".mediabar"].indexOf("background-color: #fbfbfb")] = "background-color: #1a1a1a";
+		sjson[".playpause"][sjson[".playpause"].indexOf("background-color: #bdbdbd")] = "background-color: white";
+		sjson[".playpause"][sjson[".playpause"].indexOf("border: #bdbdbd")] = "border: white";
+		sjson[".rectangle"][sjson[".rectangle"].indexOf("background-color: black")] = "background-color: white";
+		sjson[".triright"][sjson[".triright"].indexOf("border-left: 19px solid black")] = "border-left: 19px solid white";
+		sjson[".trileft"][sjson[".trileft"].indexOf("border-right: 19px solid black")] = "border-right: 19px solid white";
+		document.getElementById("play").style.borderLeft = "19px solid black";
+	} else {
+		console.log("darkmode");
+		sjson["body"][sjson["body"].indexOf("background-color: black")] = "background-color: white";
+		sjson["body"][sjson["body"].indexOf("color: white")] = "color: black";
+		sjson[".folder"][sjson[".folder"].indexOf("background-color: black")] = "background-color: white";
+		sjson[".folder"][sjson[".folder"].indexOf("border: 2px solid #646464")] = "border: 2px solid #cecece";
+		sjson[".file"][sjson[".file"].indexOf("background-color: #4a4a4a")] = "background-color: #cecece";
+		sjson[".mediabar"][sjson[".mediabar"].indexOf("background-color: #1a1a1a")] = "background-color: #fbfbfb";
+		sjson[".playpause"][sjson[".playpause"].indexOf("background-color: white")] = "background-color: #bdbdbd";
+		sjson[".playpause"][sjson[".playpause"].indexOf("border: white")] = "border: #bdbdbd";
+		sjson[".rectangle"][sjson[".rectangle"].indexOf("background-color: white")] = "background-color: black";
+		sjson[".triright"][sjson[".triright"].indexOf("border-left: 19px solid white")] = "border-left: 19px solid black";
+		sjson[".trileft"][sjson[".trileft"].indexOf("border-right: 19px solid white")] = "border-right: 19px solid black";
+		document.getElementById("play").style.borderLeft = "";
+	}
+	document.head.getElementsByTagName("style")[0].innerHTML = jsontostyle(sjson);
 }
 
 function stopclick() {
