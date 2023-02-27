@@ -262,6 +262,27 @@ function mobile() {
         resize();
     }
 }
+	
+function styletojson() {
+	var style = document.head.getElementsByTagName("style")[0].innerHTML.replaceAll("\n","").replaceAll(" ","").split("}"); 
+	var json = {};
+	for (let i = 0; i < style.length; i++) { 
+		if (style[i].split("{")[0]) {
+			json[style[i].split("{")[0]] = style[i].split("{")[1].split(";");
+		}
+  	}
+	return json;
+}
+
+function jsontostyle(json) {
+	var keys = Object.keys(json);
+	var style = "";
+	for (let i = 0; i < keys.length; i++) { 
+		style += keys[i]+"{"+json[keys[i]]+"}";
+  	}
+	return style.replaceAll(",",";");
+}
+
 function stopclick() {
     if (!e) var e = window.event;
     e.cancelBubble = true;
