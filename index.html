@@ -15,6 +15,8 @@ img {
     height: 18px;
     float: right;
     border-radius: 15%;
+	max-width: 450px;
+	max-height: 450px;
 }
 .folder {
     margin: 10px;
@@ -134,7 +136,7 @@ img {
         <div id="mobiletext" onclick="mobile();" style="width: 15px;">^</div>
     </div>
     <div class="infoblock" id="infoblock">
-        <img src="" onclick="changeimg();" id="infoimg" style="width: 80px;height: auto;">
+        <img src="" onclick="changeimg();" id="infoimg" style="width: 80px;height: 80px;">
 	    <p id="infoname"></p>    
     </div>
     <div class="audioblock" id="audioblock">
@@ -238,7 +240,7 @@ function mobile() {
         infoblock.style.flexDirection = "column";
         infoblock.style.paddingLeft = "0";
         infoimg.style.width = "90%";
-        infoimg.style.height = "auto";
+        infoimg.style.height = "90vw";
         infoimg.style.borderRadius = "3%";
         volumeblock.style.display = "none";
         infoname.style.textAlign = "center";
@@ -253,7 +255,7 @@ function mobile() {
         mediabar.style = "";
         infoimg.style = "";
         infoimg.style.width = "80px";
-        infoimg.style.height = "auto";
+        infoimg.style.height = "80px";
         infoname.style = "";
         document.body.style.overflow = "visible";
         document.body.style.position = "static";
