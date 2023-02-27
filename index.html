@@ -269,7 +269,7 @@ function styletojson() {
 	for (let i = 0; i < style.length; i++) { 
 		if (style[i].split("{")[0] && style[i].split("{")[1].split(";")) {
 			const elements = style[i].split("{")[1].split(";").map(element => {
-  			return element.trim();
+  				return element.trim();
 			});
 			json[style[i].split("{")[0]] = elements;
 		}
