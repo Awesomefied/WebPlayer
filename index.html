@@ -264,11 +264,14 @@ function mobile() {
 }
 	
 function styletojson() {
-	var style = document.head.getElementsByTagName("style")[0].innerHTML.replaceAll("\n","").replaceAll(" ","").split("}"); 
+	var style = document.head.getElementsByTagName("style")[0].innerHTML.replaceAll("\n","").replaceAll("\t","").split("}"); 
 	var json = {};
 	for (let i = 0; i < style.length; i++) { 
-		if (style[i].split("{")[0]) {
-			json[style[i].split("{")[0]] = style[i].split("{")[1].split(";");
+		if (style[i].split("{")[0] && style[i].split("{")[1].split(";")) {
+			const elements = style[i].split("{")[1].split(";").map(element => {
+  			return element.trim();
+			});
+			json[style[i].split("{")[0]] = elements;
 		}
   	}
 	return json;
@@ -278,9 +281,15 @@ function jsontostyle(json) {
 	var keys = Object.keys(json);
 	var style = "";
 	for (let i = 0; i < keys.length; i++) { 
-		style += keys[i]+"{"+json[keys[i]]+"}";
+		var elements = "";
+		for (let n = 0; n < json[keys[i]].length; n++) { 
+			if (json[keys[i]][n]) {
+				elements += json[keys[i]][n]+";";
+			}
+		}
+		style += keys[i]+"{"+elements+"}";
   	}
-	return style.replaceAll(",",";");
+	return style;
 }
 
 function stopclick() {
