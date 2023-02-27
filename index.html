@@ -134,7 +134,7 @@ img {
         <div id="mobiletext" onclick="mobile();" style="width: 15px;">^</div>
     </div>
     <div class="infoblock" id="infoblock">
-        <img src="" id="infoimg" style="width: 80px;height: auto;">
+        <img src="" onclick="changeimg();" id="infoimg" style="width: 80px;height: auto;">
 	    <p id="infoname"></p>    
     </div>
     <div class="audioblock" id="audioblock">
@@ -359,6 +359,9 @@ function media(action) {
 }
 
 function changeimg(id) {
+	if (!id) {
+		id = audiolinks[lastplayed][0].split("/")[audiolinks[lastplayed][0].split("/").length-2];
+	}
 	if (!imagelinks[id] || imagelinks[id][1].length <= 1) {
 		return;
 	}
@@ -369,9 +372,7 @@ function changeimg(id) {
 		imagelinks[id][0] = imagelinks[id][0]+1;
 	}
 	document.getElementById(id+"img").src = imagelinks[id][1][imagelinks[id][0]][1];
-	var links = "";
-	imagelinks[id][1].forEach(element => links += element[1]);
-	if (links.search(infoimg.src) != -1) {
+	if (audiolinks[lastplayed][0].split("/")[audiolinks[lastplayed][0].split("/").length-2] == id) {
 		infoimg.src = imagelinks[id][1][imagelinks[id][0]][1];
 	}
 }
