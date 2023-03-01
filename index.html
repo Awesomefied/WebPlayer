@@ -128,6 +128,10 @@ img {
 </head>
 <body>
 
+<div>
+    <button onclick="theme();">theme</button>
+</div>
+
 <div style="text-align: center;">
     <input type="file" id="filepicker" name="fileList" webkitdirectory directory multiple />
 </div>
@@ -301,6 +305,7 @@ function theme() {
 		sjson[".folder"][sjson[".folder"].indexOf("background-color: white")] = "background-color: black";
 		sjson[".folder"][sjson[".folder"].indexOf("border: 2px solid #cecece")] = "border: 2px solid #646464";
 		sjson[".file"][sjson[".file"].indexOf("background-color: #cecece")] = "background-color: #4a4a4a";
+		sjson[".file"][sjson[".file"].indexOf("border: 2px solid black")] = "border: 2px solid white";
 		sjson[".mediabar"][sjson[".mediabar"].indexOf("background-color: #fbfbfb")] = "background-color: #1a1a1a";
 		sjson[".playpause"][sjson[".playpause"].indexOf("background-color: #dadada")] = "background-color: white";
 		sjson[".playpause"][sjson[".playpause"].indexOf("border: #dadada")] = "border: white";
@@ -314,6 +319,7 @@ function theme() {
 		sjson[".folder"][sjson[".folder"].indexOf("background-color: black")] = "background-color: white";
 		sjson[".folder"][sjson[".folder"].indexOf("border: 2px solid #646464")] = "border: 2px solid #cecece";
 		sjson[".file"][sjson[".file"].indexOf("background-color: #4a4a4a")] = "background-color: #cecece";
+		sjson[".file"][sjson[".file"].indexOf("border: 2px solid white")] = "border: 2px solid black";
 		sjson[".mediabar"][sjson[".mediabar"].indexOf("background-color: #1a1a1a")] = "background-color: #fbfbfb";
 		sjson[".playpause"][sjson[".playpause"].indexOf("background-color: white")] = "background-color: #dadada";
 		sjson[".playpause"][sjson[".playpause"].indexOf("border: white")] = "border: #dadada";
