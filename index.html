@@ -535,12 +535,12 @@ async function playaudio(i) {
     }
     if (audiofolder != "") {
 	infoimg.src = imagelinks[audiofolder][1][imagelinks[audiofolder][0]][1];
-        //albumimage = [
-        //    { src: await scaleimage(imagelinks[audiofolder][1][imagelinks[audiofolder][0]][1], 256, 256), sizes: '256x256', type: 'image/png' },
-        //];
-	albumimage = [
-            { src: imagelinks[audiofolder][1][imagelinks[audiofolder][0]][1], type: 'image/png' },
+        albumimage = [
+            { src: await scaleimage(imagelinks[audiofolder][1][imagelinks[audiofolder][0]][1], 500, 500), sizes: '500x500', type: 'image/png' },
         ];
+	//albumimage = [
+    //        { src: imagelinks[audiofolder][1][imagelinks[audiofolder][0]][1], type: 'image/png' },
+    //    ];
     } else {
         infoimg.src = "./images/iconlarge.png";
     }
