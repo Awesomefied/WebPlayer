@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="./images/icon.png">
+<title>Music Player Online</title>
+<style>
+    body {
+        font-family: 'Roboto';
+        word-wrap: break-word;
+        background-color: white;
+        color: black;
+        user-select: none;
+    }
+    .folder {
+        background-color: #f9f9f9;
+        width: 30vh;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 0px 0px 10px #828282;
+    }
+    .folder:hover {
+        background-color: #ececec;
+    }
+    .folder:active {
+        box-shadow: 0px 0px 5px #828282;;
+    }
+    .folder h1 {
+        margin: 0px;
+        font-size: 15px;
+    }
+    .folder p {
+        margin: 0px;
+        font-size: 12px;
+    }
+    .folder img {
+        image-rendering: auto;
+        width: 100%;
+        border-radius: 10px;
+    }
+    #albums {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    #viewalbum {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        flex-direction: column;
+    }
+    #vabackground {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: white;
+    }
+    #vatopinfo {
+        display: flex;
+        max-width: 100%;
+        justify-content: center;
+        align-items: end;
+    }
+    #vacover {
+        border-radius: 10px;
+        box-shadow: 0px 0px 7px #8e8e8e;
+        margin: 50px;
+        max-width: 90%;
+        width:  256px;
+        height: 265px;
+        cursor: pointer;
+    }
+    #vamaininfo {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        margin-bottom: 50px;
+    }
+    #vatext {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        padding-bottom: 80px;
+    }
+    .vabutton {
+        width: 80px;
+        background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0px 0px 5px #6a6969;
+        height: 25px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        margin-left: 5px;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+    .vabutton:active {
+        background-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0px 0px 3px #838282;
+    }
+    #vabackbtn {
+        width: 40px;
+        top: 0;
+        position: absolute;
+        margin: 20px;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        border-radius: 5px;
+        font-size: 20px;
+        color: #2d2d2d;
+        background-color: rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+    }
+    #vabackbtn:hover {
+        background-color: rgba(206, 206, 206, 0.4);
+    }
+    #vabackbtn:active {
+        background-color: rgba(135, 135, 135, 0.5);
+        color: black;
+    }
+    #vabackbtn p {
+        margin: 0;
+    }
+    #vasongs {
+        max-width: 90%;
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        width: 700px;
+        background-color: rgba(255, 255, 255, 0.4);
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .vasongdiv {
+        border-top: 1.5px solid #acacac;
+        width: 100%;
+        cursor: pointer;
+    }
+    .vasongdiv p {
+        padding-left: 35px;
+    }
+    .vasongdiv:hover {
+        background-color: rgba(138, 138, 138, 0.2);
+    }
+    .vasongdiv:active {
+        background-color: rgba(138, 138, 138, 0.5);
+    }
+    #blurdiv {
+        backdrop-filter: blur(40px);
+        background-color: rgba(255, 255, 255, 0.3);
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+<input type="file" id="filepicker" name="fileList" webkitdirectory multiple />
+<div id="vacontainer" style="display: none;">
+    <div id="vabackground"></div>
+    <div id="blurdiv"></div>
+    <div id="viewalbum">
+        <div id="vabackbtn" onclick="hideshow('vacontainer');hideshow('albums');">
+            <p><</p>
+        </div>
+        <div id="vatopinfo">
+                <img id="vacover" src="./icon.png">
+                <div id="vamaininfo">
+                    <div id="vatext">
+                        <h1 id="vatitle" style="margin: 0;">album name</h1>
+                        <p id="vadir" style="margin: 5px;">directory</p>
+                    </div>
+                    <div style="display: flex;">
+                        <div class="vabutton" id="vaplay">
+                            <p>Play</p>
+                        </div>
+                        <div class="vabutton" id="vashuffle">
+                            <p>Shuffle</p>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div id="vasongs">
+
+        </div>
+    </div>
+</div>
+<div id="albums"></div>
+
+<script>
+const folders = {};
+const songs = [];
+const images = [];
+
+const albums = document.getElementById("albums");
+
+function mobile() {
+	if (window.innerWidth < 610 && !vatopinfo.style.flexDirection) {
+		vatopinfo.style.flexDirection = "column";
+        vatopinfo.style.alignItems = "center";
+		vatext.style.alignItems = "center";
+		vatext.style.padding = 0;
+		vaplay.style.width = "100%";
+		vaplay.style.height = "40px";
+		vaplay.style.fontSize = "23px";
+		vaplay.style.borderRadius = "10px";
+		vaplay.style.marginLeft = "5px";
+		vaplay.style.marginRight = "5px";
+		vashuffle.style.width = "100%";
+		vashuffle.style.height = "40px";
+		vashuffle.style.fontSize = "23px";
+		vashuffle.style.borderRadius = "10px";
+        vacover.style.marginBottom = "30px";
+	}
+	if (window.innerWidth > 609 && vatopinfo.style.flexDirection) {
+		vatopinfo.style = "";
+		vatext.style = "";
+		vaplay.style = "";
+		vashuffle.style = "";
+        vacover.style = "";
+	}
+}
+mobile();
+window.onresize = mobile;
+
+function selectalbum(dir) {
+    vasongs.innerHTML = "";
+    var songarray = folders[dir]["songs"];
+    if (!folders[dir]["songs"]) {
+        songarray = [];
+        for (let i = 0; i < Object.keys(folders).length; i++) {
+            if (Object.keys(folders)[i].indexOf(dir+"/") != -1) {
+                for (let n = 0; n < folders[Object.keys(folders)[i]]["songs"].length; n++) {
+                    songarray.push(folders[Object.keys(folders)[i]]["songs"][n]);
+                }
+            }
+        }
+    }
+    for (let i = 0; i < songarray.length+1; i++) { 
+        var vasongdiv = document.createElement("div");
+        var vasongname = document.createElement("p");
+        if (i == songarray.length) {
+            vasongname.style.padding = "0";
+            vasongname.style.fontSize = "14px";
+            vasongname.style.marginBottom = "5px";
+            vasongname.innerText = songarray.length+" songs";
+            vasongdiv.style.width = "100%";
+            vasongdiv.style.borderTop = "1.5px solid #acacac";
+        } else {
+            vasongdiv.className = "vasongdiv";
+            vasongname.innerText = songarray[i][0];
+        }
+        vasongdiv.appendChild(vasongname);
+        vasongs.appendChild(vasongdiv);
+    }
+	vacover.src = images[folders[dir]["cover"][0]] ?? "./icon.png";
+	vatitle.innerText = dir.split("/").pop();
+	vadir.innerText = dir.slice(0, dir.lastIndexOf("/"));
+    vacover.setAttribute("onclick", `changecover('${dir}');`);
+	if (!images[folders[dir]["cover"][0]]) {
+		vabackground.style.backgroundImage = "";	
+		return;	
+	} 
+	vabackground.style.backgroundImage = `url('${images[folders[dir]["cover"][0]]}')`;
+
+}
+
+function changecover(folder) {
+    if (folders[folder]["cover"][1]) {
+        if (folders[folder]["cover"][1].length < 2) {
+            return;
+        }
+        var index = folders[folder]["cover"][1].indexOf(folders[folder]["cover"][0])
+        var newindex = folders[folder]["cover"][1][index+1];
+        if (index+1 >= folders[folder]["cover"][1].length) {
+            newindex = folders[folder]["cover"][1][0];
+        }
+        folders[folder]["cover"][0] = newindex;
+        document.getElementById(folder).getElementsByTagName("img")[0].src = images[newindex];
+        vacover.src = images[newindex];
+        vabackground.style.backgroundImage = `url('${images[newindex]}')`;
+    }	
+}
+
+function hideshow(id) {
+    const element = document.getElementById(id);
+    if (element.style.display == "none") {
+        element.style.display = "";
+    } else {
+        element.style.display = "none";
+    }
+}
+
+document.getElementById("filepicker").addEventListener(
+  "change",
+  (event) => {
+    hideshow('filepicker');
+    let output = document.getElementById("listing");
+    var safefolders = [];
+    for (const file of event.target.files) {
+        const fname = file.webkitRelativePath.slice(0,file.webkitRelativePath.lastIndexOf("/"));
+        if (!folders[fname]) {
+            folders[fname] = {};
+            folders[fname]["cover"] = [];
+        }
+        if (file.type.search("image") != -1) {
+            images.push(URL.createObjectURL(file));
+            if (folders[fname]["cover"][1]) {
+                folders[fname]["cover"][1].push(images.length-1);
+            }
+            if (folders[fname]["cover"].length == 0){
+                folders[fname]["cover"].push(images.length-1,[images.length-1]);
+                if (document.getElementById(fname)) {
+                    document.getElementById(fname).getElementsByTagName("img")[0].src = images[images.length-1];
+                }
+            } 
+        }
+    	if (file.type.search("audio") != -1) {
+            var lfolder = fname.slice(0,fname.lastIndexOf("/"));
+            if (safefolders.indexOf(lfolder) == -1) {
+                safefolders.push(lfolder);
+            }
+            if (!folders[fname]["songs"]) {
+                folders[fname]["songs"] = [];
+                var fdiv = document.createElement("div");
+                var fp = document.createElement("p");
+                var fh = document.createElement("h1");
+                var fimg = document.createElement("img");
+                fp.innerText = fname;
+                fdiv.className = "folder";
+                fdiv.id = fname;
+                fimg.src = images[folders[fname]["cover"][0]] ?? "./icon.png";
+                //fimg.setAttribute("onclick", `changecover('${fname}');`);
+                fh.innerText = fname.split("/").pop();
+                fdiv.appendChild(fimg);
+                fdiv.appendChild(fh);
+                fdiv.appendChild(fp);
+                fdiv.setAttribute("onclick", `selectalbum('${fname}');hideshow('vacontainer');hideshow('albums');`);
+                albums.appendChild(fdiv);
+            }
+            songs.push([file.webkitRelativePath, URL.createObjectURL(file)]);
+			folders[fname]["songs"].push([file.webkitRelativePath.split("/").pop(), songs.length-1]);
+        }
+    }
+    for (let i = 0; i < Object.keys(folders).length; i++) { 
+        var folder = folders[Object.keys(folders)[i]];
+        if (!folder["songs"] && safefolders.indexOf(Object.keys(folders)[i]) != -1) {
+            var fname = safefolders[safefolders.indexOf(Object.keys(folders)[i])];
+            var fdiv = document.createElement("div");
+            var fp = document.createElement("p");
+            var fh = document.createElement("h1");
+            var fimg = document.createElement("img");
+            fp.innerText = fname;
+            fdiv.className = "folder";
+            fdiv.id = fname;
+            fimg.src = images[folders[fname]["cover"][0]] ?? "./icon.png";
+            //fimg.setAttribute("onclick", `changecover('${fname}');`);
+            fh.innerText = fname.split("/").pop();
+            fdiv.appendChild(fimg);
+            fdiv.appendChild(fh);
+            fdiv.appendChild(fp);
+            fdiv.setAttribute("onclick", `selectalbum('${fname}');hideshow('vacontainer');hideshow('albums');`);
+            albums.appendChild(fdiv);
+        }
+        if (!folder["songs"] && safefolders.indexOf(Object.keys(folders)[i]) == -1) {
+            if (folder["cover"][1]) {
+                for (let n = 0; n < folder["cover"][1].length; n++) {
+                    URL.revokeObjectURL(images[folder["cover"][1][n]]);
+                }
+            }
+            delete folders[Object.keys(folders)[i]];
+        }
+    }
+  },
+  false,
+);
+</script>
+</body>
+</html>
