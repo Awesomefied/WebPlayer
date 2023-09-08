@@ -3,7 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-<link rel="icon" type="image/x-icon" href="./images/icon.png">
+<link rel="icon" type="image/x-icon" href="./images/images/icon.png">
 <title>Music Player Online</title>
 <style>
     body {
@@ -166,6 +166,7 @@
     }
     #blurdiv {
         backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
         background-color: rgba(255, 255, 255, 0.3);
         width: 100%;
         height: 100%;
@@ -185,7 +186,7 @@
             <p><</p>
         </div>
         <div id="vatopinfo">
-                <img id="vacover" src="./icon.png">
+                <img id="vacover" src="./images/icon.png">
                 <div id="vamaininfo">
                     <div id="vatext">
                         <h1 id="vatitle" style="margin: 0;">album name</h1>
@@ -274,7 +275,7 @@ function selectalbum(dir) {
         vasongdiv.appendChild(vasongname);
         vasongs.appendChild(vasongdiv);
     }
-	vacover.src = images[folders[dir]["cover"][0]] ?? "./icon.png";
+	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/icon.png";
 	vatitle.innerText = dir.split("/").pop();
 	vadir.innerText = dir.slice(0, dir.lastIndexOf("/"));
     vacover.setAttribute("onclick", `changecover('${dir}');`);
@@ -350,7 +351,7 @@ document.getElementById("filepicker").addEventListener(
                 fp.innerText = fname;
                 fdiv.className = "folder";
                 fdiv.id = fname;
-                fimg.src = images[folders[fname]["cover"][0]] ?? "./icon.png";
+                fimg.src = images[folders[fname]["cover"][0]] ?? "./images/icon.png";
                 //fimg.setAttribute("onclick", `changecover('${fname}');`);
                 fh.innerText = fname.split("/").pop();
                 fdiv.appendChild(fimg);
@@ -374,7 +375,7 @@ document.getElementById("filepicker").addEventListener(
             fp.innerText = fname;
             fdiv.className = "folder";
             fdiv.id = fname;
-            fimg.src = images[folders[fname]["cover"][0]] ?? "./icon.png";
+            fimg.src = images[folders[fname]["cover"][0]] ?? "./images/icon.png";
             //fimg.setAttribute("onclick", `changecover('${fname}');`);
             fh.innerText = fname.split("/").pop();
             fdiv.appendChild(fimg);
