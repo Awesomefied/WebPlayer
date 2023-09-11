@@ -400,7 +400,7 @@ function selectalbum(dir) {
 
 }
 
-function changecover(folder) {
+async function changecover(folder) {
     if (folders[folder]["cover"][1]) {
         if (folders[folder]["cover"][1].length < 2) {
             return;
@@ -410,10 +410,14 @@ function changecover(folder) {
         if (index+1 >= folders[folder]["cover"][1].length) {
             newindex = folders[folder]["cover"][1][0];
         }
+        if (ibalbumcover.src == images[folders[folder]["cover"][0]]) {
+            ibalbumcover.src = images[newindex];
+        }
         folders[folder]["cover"][0] = newindex;
         document.getElementById(folder).getElementsByTagName("img")[0].src = images[newindex];
         vacover.src = images[newindex];
         vabackground.style.backgroundImage = `url('${images[newindex]}')`;
+        await updatecover(folder);
     }	
 }
 
@@ -517,10 +521,24 @@ function media(action) {
 
     }
 }
-
+var defaultcover = [{
+    src: "",
+    sizes: "256x256",
+    type: "image/png",
+},
+{
+    src: "",
+    sizes: "1000x1000",
+    type: "image/png",
+}];
+async function dc() {
+    defaultcover[0].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/icon.png",256,256); 
+    defaultcover[1].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/iconlarge.png",1000,1000);
+}
+dc();
 function playsong(snum) {
     infobar.style = "";
-    var sfolder = folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))];
+    const sfolder = folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))];
     ibalbumtitle.innerText = songs[snum][0].split("/").pop();
     ibalbumartist.innerText = songs[snum][0].split("/")[songs[snum][0].split("/").length-2];
     ibalbumcover.src = images[sfolder["cover"][0]] ?? "./images/icon.png";
@@ -532,7 +550,7 @@ function playsong(snum) {
             title: songs[snum][0].split("/").pop(),
 	    	artist: songs[snum][0].split("/")[songs[snum][0].split("/").length-2],
       	    album: '',
-            artwork: folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))]["cover"][2],
+            artwork: folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))]["cover"][2] ?? defaultcover,
             });
             
         }
