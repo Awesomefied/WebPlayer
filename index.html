@@ -47,6 +47,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+        padding-bottom: 300px;
     }
     #viewalbum {
         width: 100%;
@@ -100,7 +101,7 @@
     .vabutton {
         width: 80px;
         background-color: rgba(255, 255, 255, 0.4);
-        box-shadow: 0px 0px 5px #6a6969;
+        box-shadow: 0px 0px 5px #959595;
         height: 25px;
         border-radius: 5px;
         display: flex;
@@ -149,6 +150,7 @@
         background-color: rgba(255, 255, 255, 0.4);
         padding: 10px;
         border-radius: 10px;
+        margin-bottom: 200px;
     }
     .vasongdiv {
         border-top: 1.5px solid #acacac;
@@ -174,9 +176,83 @@
         top: 0;
         left: 0;
     }
+    #infobar {
+        width: 100%;
+        position: fixed;
+        bottom: 0px;
+        padding: 20px;
+        display: flex;
+        left: 0px;
+        box-shadow: 0px 0px 10px #848484;
+        padding-right: 0px;
+        padding-left: 0px;
+        backdrop-filter: blur(60px);
+        -webkit-backdrop-filter: blur(60px);
+        background-color: rgba(255, 255, 255, 0.6);
+    }
+    #ibalbuminfo {
+        display: flex;
+        width: 100%;
+        padding-left: 20px;
+    }
+    #ibalbuminfo img {
+        height: 100px;
+        border-radius: 10px;
+    }
+    #ibalbuminfo p {
+        margin: 5px;
+    }
+    #ibalbuminfo div {
+        padding-left: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 200px;
+    }
+    #ibplayinfo {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    #ibplaybttns { 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 300px;
+        padding-top: 10px;
+    }
+    #ibplaybttns img {
+        max-width: 30px;
+        max-height: 30px;
+        cursor: pointer;
+    }
+    #ibplaycontrols {
+        display: flex;
+        width: 100%;
+        align-items: center;
+    }
+    #ibplaycontrols p {
+        margin: 0;
+    }
+    #ibplaycontrols input {
+        width: 100%;
+        height: 20px;
+        margin: 10px;
+    }
+    #ibvolume {
+        width: 100%;
+        display: flex;
+        justify-content: right;
+        padding-right: 20px;
+    }
 </style>
 </head>
 <body>
+<audio id="audio">
+    <source id="audiosource" type="audio/mpeg">
+</audio>
 <input type="file" id="filepicker" name="fileList" webkitdirectory multiple />
 <div id="vacontainer" style="display: none;">
     <div id="vabackground"></div>
@@ -208,7 +284,32 @@
     </div>
 </div>
 <div id="albums"></div>
-
+<div id="infobar" style="display: none;">
+    <div id="ibalbuminfo">
+        <img id="ibalbumcover" src="./images/icon.png">
+        <div>
+            <p id="ibalbumtitle">Title</p>
+            <p id="ibalbumartist" style="font-size: 15px;">Artist</p>
+        </div>
+    </div>
+    <div id="ibplayinfo">
+        <div id="ibplaybttns">
+            <img src="./images/shuffle.svg" id="ibshuffle"  onclick="media('shuffle')" style="width: 20px;">
+            <img style="transform: rotate(180deg);" src="./images/skip.svg">
+            <img src="./images/play.svg" id="ibplay" onclick="media('play')">
+            <img src="./images/skip.svg">
+            <img style="width: 20px;" src="./images/loop.svg" id="ibloop" onclick="media('loop')">
+        </div>
+        <div id="ibplaycontrols">
+            <p id="ibtime">0:00</p>
+            <input id="ibseekbar" type="range" min="0" max="100" value="0">
+            <p id="ibtime2">0:00</p>
+        </div>
+    </div>
+    <div id="ibvolume">
+        <input id="ibvolumeinput" type="range" min="0" max="100" value="100">
+    </div>
+  </div>
 <script>
 const folders = {};
 const songs = [];
@@ -241,6 +342,17 @@ function mobile() {
 		vashuffle.style = "";
         vacover.style = "";
 	}
+    if (window.innerWidth < 950 && !ibalbuminfo.style.display) {
+        ibalbuminfo.style.display = "none";
+        ibvolume.style.display = "none";
+        ibplayinfo.style.paddingLeft = "20px";
+        ibplayinfo.style.paddingRight = "20px";
+    }
+    if (window.innerWidth > 949 && ibalbuminfo.style.display) {
+        ibalbuminfo.style = "";
+        ibvolume.style = "";
+        ibplayinfo.style = "";
+    }
 }
 mobile();
 window.onresize = mobile;
@@ -271,6 +383,7 @@ function selectalbum(dir) {
         } else {
             vasongdiv.className = "vasongdiv";
             vasongname.innerText = songarray[i][0];
+            vasongdiv.setAttribute("onclick", `playsong('${songarray[i][1]}')`)
         }
         vasongdiv.appendChild(vasongname);
         vasongs.appendChild(vasongdiv);
@@ -313,6 +426,170 @@ function hideshow(id) {
     }
 }
 
+async function blob64(url) {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = reject;
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function scaleimage(url, width, height) {
+    var imgDataUrl = await blob64(url);
+    var img = new Image();
+    img.src = imgDataUrl;
+
+    return new Promise((resolve, reject) => {
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL());
+      };
+      img.onerror = reject;
+    });
+}
+
+async function getcover(url) {
+    const coverarray = [];
+    const scaledimg = await scaleimage(url,192,192);
+    const img = new Image();
+    img.src = url;
+    img.onload = function() {
+        if (img.width > 192) {
+            coverarray.push({
+                src: scaledimg,
+                sizes: "192x192",
+                type: "image/png",
+            },
+            {
+                src: url,
+                sizes: img.width+"x"+img.height,
+                type: "image/png",
+            });
+        } else {
+            coverarray.push({
+                src: url,
+                sizes: img.width+"x"+img.height,
+                type: "image/png",
+            });
+        }
+    }
+    return coverarray;
+}
+
+async function updatecover(foldername) {
+    folders[foldername]["cover"][2] = await getcover(images[folders[foldername]["cover"][0]]);
+}
+
+const calculateTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${minutes}:${returnedSeconds}`;
+}
+
+function media(action) {
+    if (action == "play") {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+    }
+    if (action == "loop") {
+
+    }
+    if (action == "shuffle") {
+
+    }
+    if (action == "prev") {
+
+    }
+    if (action == "next") {
+
+    }
+}
+
+function playsong(snum) {
+    infobar.style = "";
+    var sfolder = folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))];
+    ibalbumtitle.innerText = songs[snum][0].split("/").pop();
+    ibalbumartist.innerText = songs[snum][0].split("/")[songs[snum][0].split("/").length-2];
+    ibalbumcover.src = images[sfolder["cover"][0]] ?? "./images/icon.png";
+    audiosource.src = songs[snum][1];
+    audio.load();
+    audio.play().then(_ => { 
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+            title: songs[snum][0].split("/").pop(),
+	    	artist: songs[snum][0].split("/")[songs[snum][0].split("/").length-2],
+      	    album: '',
+            artwork: folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))]["cover"][2],
+            });
+            
+        }
+    })
+    .catch(error => { console.log(error) });
+    const actionHandlers = [
+        ['play',          () => { audio.play(); }],
+        ['pause',         () => { audio.pause(); }],
+        ['previoustrack', () => { media("prev"); }],
+        ['nexttrack',     () => { media("next"); }],
+        ['stop',          () => { audio.pause();audio.currentTime = 0; }],
+        //['seekbackward',  (details) => { audio.currentTime = audio.currentTime-(details.seekOffset || 10); }],
+        //['seekforward',   (details) => { audio.currentTime = audio.currentTime+(details.seekOffset || 10); }],
+        ['seekto',        (details) => { 
+            if (details.fastSeek && 'fastSeek' in audio) {
+                audio.fastSeek(details.seekTime);
+                return;
+            }
+            audio.currentTime = details.seekTime;
+        }],
+    ];
+}
+
+ibvolumeinput.oninput = function() {
+  audio.volume = ibvolumeinput.value/100;
+}
+
+ibseekbar.oninput = function() {
+  audio.currentTime = ibseekbar.value/100;
+}
+
+
+audio.addEventListener("play", function() {
+    ibplay.src = "./images/pause.svg";
+});
+
+audio.addEventListener("pause", function() {
+    ibplay.src = "./images/play.svg";
+});
+
+function updatebar() {
+    if (ibseekbar.max != Math.floor(audio.duration*100)) {
+      ibseekbar.max = Math.floor(audio.duration*100);
+    }
+    if (ibseekbar.value != Math.floor(audio.currentTime*100)) {
+      ibseekbar.value = Math.floor(audio.currentTime*100);
+    }
+    
+    if (ibtime.innerText != calculateTime(Math.floor(audio.currentTime))) {
+      ibtime.innerText = calculateTime(Math.floor(audio.currentTime));
+    }
+    if (ibtime2.innerText != calculateTime(audio.duration)) {
+      ibtime2.innerText = calculateTime(audio.duration);
+    }
+}
+setInterval(updatebar, 100);
+
 document.getElementById("filepicker").addEventListener(
   "change",
   (event) => {
@@ -335,6 +612,7 @@ document.getElementById("filepicker").addEventListener(
                 if (document.getElementById(fname)) {
                     document.getElementById(fname).getElementsByTagName("img")[0].src = images[images.length-1];
                 }
+                updatecover(fname);
             } 
         }
     	if (file.type.search("audio") != -1) {
@@ -357,7 +635,7 @@ document.getElementById("filepicker").addEventListener(
                 fdiv.appendChild(fimg);
                 fdiv.appendChild(fh);
                 fdiv.appendChild(fp);
-                fdiv.setAttribute("onclick", `selectalbum('${fname}');hideshow('vacontainer');hideshow('albums');`);
+                fdiv.setAttribute("onclick", "selectalbum(`"+fname+"`);hideshow('vacontainer');hideshow('albums');");
                 albums.appendChild(fdiv);
             }
             songs.push([file.webkitRelativePath, URL.createObjectURL(file)]);
@@ -381,7 +659,7 @@ document.getElementById("filepicker").addEventListener(
             fdiv.appendChild(fimg);
             fdiv.appendChild(fh);
             fdiv.appendChild(fp);
-            fdiv.setAttribute("onclick", `selectalbum('${fname}');hideshow('vacontainer');hideshow('albums');`);
+            fdiv.setAttribute("onclick", "selectalbum(`"+fname+"`);hideshow('vacontainer');hideshow('albums');");
             albums.appendChild(fdiv);
         }
         if (!folder["songs"] && safefolders.indexOf(Object.keys(folders)[i]) == -1) {
