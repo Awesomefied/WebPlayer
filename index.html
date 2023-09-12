@@ -470,24 +470,24 @@ async function getcover(url) {
     img.onload = function() {
         if (img.width > 192 && img.width < 901) {
             coverarray.push({
-                src: scaledimg,
-                sizes: "192x192",
+                src: url,
+                sizes: img.width+"x"+img.height,
                 type: "image/png",
             },
             {
-                src: url,
-                sizes: img.width+"x"+img.height,
+                src: scaledimg,
+                sizes: "192x192",
                 type: "image/png",
             });
         } else if (img.width > 900) {
             coverarray.push({
-                src: scaledimg,
-                sizes: "192x192",
+                src: bigimg,
+                sizes: "900x900",
                 type: "image/png",
             },
             {
-                src: bigimg,
-                sizes: "900x900",
+                src: scaledimg,
+                sizes: "192x192",
                 type: "image/png",
             });
         } else {
