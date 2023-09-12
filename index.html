@@ -464,10 +464,14 @@ async function scaleimage(url, width, height) {
 async function getcover(url) {
     const coverarray = [];
     const scaledimg = await scaleimage(url,192,192);
+    const bigimg = await scaleimage(url,1000,1000);
     const img = new Image();
     img.src = url;
     img.onload = function() {
         if (img.width > 192) {
+            if (img.width > 1000) {
+                url = bigimg;
+            }
             coverarray.push({
                 src: scaledimg,
                 sizes: "192x192",
@@ -509,10 +513,22 @@ function media(action) {
         }
     }
     if (action == "loop") {
-
+        if (!ibloop.style.filter) {
+            ibloop.style.filter = "invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%)";
+        } else {
+            if (ibloop.style.filter.indexOf("hue-rotate(87deg)") != -1) {
+                ibloop.style.filter = "invert(42%) sepia(93%) saturate(1352%) hue-rotate(0deg) brightness(119%)";
+            } else if (ibloop.style.filter.indexOf("hue-rotate(0deg)") != -1) {
+                ibloop.style.filter = "";
+            } 
+        }
     }
     if (action == "shuffle") {
-
+        if (!ibshuffle.style.filter) {
+            ibshuffle.style.filter = "invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%)";
+        } else {
+            ibshuffle.style.filter = "";
+        } 
     }
     if (action == "prev") {
 
@@ -582,13 +598,21 @@ ibseekbar.oninput = function() {
   audio.currentTime = ibseekbar.value/100;
 }
 
-
 audio.addEventListener("play", function() {
     ibplay.src = "./images/pause.svg";
 });
 
 audio.addEventListener("pause", function() {
     ibplay.src = "./images/play.svg";
+});
+
+
+audio.addEventListener("ended", function() {
+
+    if (ibloop.style.filter.indexOf("hue-rotate(0deg)") != -1) {
+        audio.currentTime = 0;
+        audio.play();
+    }
 });
 
 function updatebar() {
@@ -658,6 +682,13 @@ document.getElementById("filepicker").addEventListener(
             }
             songs.push([file.webkitRelativePath, URL.createObjectURL(file)]);
 			folders[fname]["songs"].push([file.webkitRelativePath.split("/").pop(), songs.length-1]);
+        }
+    }
+    for (let i = 0; i < safefolders.length; i++) { 
+        const safefolder = safefolders[i];
+        if (!folders[safefolder]) {
+            folders[safefolder] = {};
+            folders[safefolder]["cover"] = [];
         }
     }
     for (let i = 0; i < Object.keys(folders).length; i++) { 
