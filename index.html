@@ -464,14 +464,11 @@ async function scaleimage(url, width, height) {
 async function getcover(url) {
     const coverarray = [];
     const scaledimg = await scaleimage(url,192,192);
-    const bigimg = await scaleimage(url,1000,1000);
+    const bigimg = await scaleimage(url,900,900);
     const img = new Image();
     img.src = url;
     img.onload = function() {
-        if (img.width > 192) {
-            if (img.width > 1000) {
-                url = bigimg;
-            }
+        if (img.width > 192 && img.width < 901) {
             coverarray.push({
                 src: scaledimg,
                 sizes: "192x192",
@@ -480,6 +477,17 @@ async function getcover(url) {
             {
                 src: url,
                 sizes: img.width+"x"+img.height,
+                type: "image/png",
+            });
+        } else if (img.width > 900) {
+            coverarray.push({
+                src: scaledimg,
+                sizes: "192x192",
+                type: "image/png",
+            },
+            {
+                src: bigimg,
+                sizes: "900x900",
                 type: "image/png",
             });
         } else {
@@ -544,12 +552,12 @@ var defaultcover = [{
 },
 {
     src: "",
-    sizes: "1000x1000",
+    sizes: "900x900",
     type: "image/png",
 }];
 async function dc() {
     defaultcover[0].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/icon.png",256,256); 
-    defaultcover[1].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/iconlarge.png",1000,1000);
+    defaultcover[1].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/iconlarge.png",900,900);
 }
 dc();
 function playsong(snum) {
