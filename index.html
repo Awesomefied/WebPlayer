@@ -262,7 +262,7 @@
             <p><</p>
         </div>
         <div id="vatopinfo">
-                <img id="vacover" src="./images/icon.png">
+                <img id="vacover" src="./images/iconlarge.png">
                 <div id="vamaininfo">
                     <div id="vatext">
                         <h1 id="vatitle" style="margin: 0;">album name</h1>
@@ -286,7 +286,7 @@
 <div id="albums"></div>
 <div id="infobar" style="display: none;">
     <div id="ibalbuminfo">
-        <img id="ibalbumcover" src="./images/icon.png">
+        <img id="ibalbumcover" src="./images/iconlarge.png">
         <div>
             <p id="ibalbumtitle">Title</p>
             <p id="ibalbumartist" style="font-size: 15px;">Artist</p>
@@ -388,7 +388,7 @@ function selectalbum(dir) {
         vasongdiv.appendChild(vasongname);
         vasongs.appendChild(vasongdiv);
     }
-	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/icon.png";
+	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/iconlarge.png";
 	vatitle.innerText = dir.split("/").pop();
 	vadir.innerText = dir.slice(0, dir.lastIndexOf("/"));
     vacover.setAttribute("onclick", `changecover('${dir}');`);
@@ -555,8 +555,8 @@ var defaultcover = [{
     type: "image/png",
 }];
 async function dc() {
-    defaultcover[0].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/icon.png",256,256); 
-    defaultcover[1].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/iconlarge.png",900,900);
+    defaultcover[1].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/icon.png",256,256); 
+    defaultcover[0].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/iconlarge.png",900,900);
 }
 dc();
 function playsong(snum) {
@@ -564,7 +564,7 @@ function playsong(snum) {
     const sfolder = folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))];
     ibalbumtitle.innerText = songs[snum][0].split("/").pop();
     ibalbumartist.innerText = songs[snum][0].split("/")[songs[snum][0].split("/").length-2];
-    ibalbumcover.src = images[sfolder["cover"][0]] ?? "./images/icon.png";
+    ibalbumcover.src = images[sfolder["cover"][0]] ?? "./images/iconlarge.png";
     audiosource.src = songs[snum][1];
     audio.load();
     audio.play().then(_ => { 
@@ -678,7 +678,7 @@ document.getElementById("filepicker").addEventListener(
                 fp.innerText = fname;
                 fdiv.className = "folder";
                 fdiv.id = fname;
-                fimg.src = images[folders[fname]["cover"][0]] ?? "./images/icon.png";
+                fimg.src = images[folders[fname]["cover"][0]] ?? "./images/iconlarge.png";
                 //fimg.setAttribute("onclick", `changecover('${fname}');`);
                 fh.innerText = fname.split("/").pop();
                 fdiv.appendChild(fimg);
@@ -709,7 +709,7 @@ document.getElementById("filepicker").addEventListener(
             fp.innerText = fname;
             fdiv.className = "folder";
             fdiv.id = fname;
-            fimg.src = images[folders[fname]["cover"][0]] ?? "./images/icon.png";
+            fimg.src = images[folders[fname]["cover"][0]] ?? "./images/iconlarge.png";
             //fimg.setAttribute("onclick", `changecover('${fname}');`);
             fh.innerText = fname.split("/").pop();
             fdiv.appendChild(fimg);
