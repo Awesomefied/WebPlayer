@@ -295,9 +295,9 @@
     <div id="ibplayinfo">
         <div id="ibplaybttns">
             <img src="./images/shuffle.svg" id="ibshuffle"  onclick="media('shuffle')" style="width: 20px;">
-            <img style="transform: rotate(180deg);" src="./images/skip.svg">
+            <img style="transform: rotate(180deg);" onclick="media('prev')" src="./images/skip.svg">
             <img src="./images/play.svg" id="ibplay" onclick="media('play')">
-            <img src="./images/skip.svg">
+            <img src="./images/skip.svg" onclick="media('next')">
             <img style="width: 20px;" src="./images/loop.svg" id="ibloop" onclick="media('loop')">
         </div>
         <div id="ibplaycontrols">
@@ -523,11 +523,14 @@ function media(action) {
     if (action == "loop") {
         if (!ibloop.style.filter) {
             ibloop.style.filter = "invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%)";
+            audio.loop = false;
         } else {
             if (ibloop.style.filter.indexOf("hue-rotate(87deg)") != -1) {
                 ibloop.style.filter = "invert(42%) sepia(93%) saturate(1352%) hue-rotate(0deg) brightness(119%)";
+                audio.loop = true;
             } else if (ibloop.style.filter.indexOf("hue-rotate(0deg)") != -1) {
                 ibloop.style.filter = "";
+                audio.loop = false;
             } 
         }
     }
@@ -542,7 +545,7 @@ function media(action) {
 
     }
     if (action == "next") {
-
+        console.log("neeeext!");
     }
 }
 var defaultcover = [{
@@ -582,8 +585,8 @@ function playsong(snum) {
     const actionHandlers = [
         ['play',          () => { audio.play(); }],
         ['pause',         () => { audio.pause(); }],
-        ['previoustrack', () => { media("prev"); }],
-        ['nexttrack',     () => { media("next"); }],
+        ['previoustrack', () => { media('prev'); }],
+        ['nexttrack',     () => { media('next'); }],
         ['stop',          () => { audio.pause();audio.currentTime = 0; }],
         //['seekbackward',  (details) => { audio.currentTime = audio.currentTime-(details.seekOffset || 10); }],
         //['seekforward',   (details) => { audio.currentTime = audio.currentTime+(details.seekOffset || 10); }],
@@ -615,11 +618,8 @@ audio.addEventListener("pause", function() {
 
 
 audio.addEventListener("ended", function() {
-
-    if (ibloop.style.filter.indexOf("hue-rotate(0deg)") != -1) {
-        audio.currentTime = 0;
-        audio.play();
-    }
+    audio.currentTime = 0;
+    media("next");
 });
 
 function updatebar() {
