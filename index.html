@@ -599,26 +599,38 @@ function playsong(snum, dir) {
       	    album: '',
             artwork: folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))]["cover"][2] ?? defaultcover,
             });
-            
+            navigator.mediaSession.setActionHandler("play", () => {
+                audio.play();
+            });
+            navigator.mediaSession.setActionHandler("pause", () => {
+                audio.pause();
+            });
+            navigator.mediaSession.setActionHandler("stop", () => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            navigator.mediaSession.setActionHandler("seekbackward", () => {
+                audio.currentTime = audio.currentTime-(details.seekOffset || 10);
+            });
+            navigator.mediaSession.setActionHandler("seekforward", (details) => {
+                audio.currentTime = audio.currentTime+(details.seekOffset || 10);
+            });
+            navigator.mediaSession.setActionHandler("seekto", (details) => { 
+                if (details.fastSeek && 'fastSeek' in audio) {
+                    audio.fastSeek(details.seekTime);
+                    return;
+                }
+                audio.currentTime = details.seekTime;
+            });
+            navigator.mediaSession.setActionHandler("previoustrack", () => {
+                media('prev');
+            });
+            navigator.mediaSession.setActionHandler("nexttrack", () => {
+                media('next');
+            });
         }
     })
     .catch(error => { console.log(error) });
-    const actionHandlers = [
-        ['play',          () => { audio.play(); }],
-        ['pause',         () => { audio.pause(); }],
-        ['previoustrack', () => { media('prev'); }],
-        ['nexttrack',     () => { media('next'); }],
-        ['stop',          () => { audio.pause();audio.currentTime = 0; }],
-        //['seekbackward',  (details) => { audio.currentTime = audio.currentTime-(details.seekOffset || 10); }],
-        //['seekforward',   (details) => { audio.currentTime = audio.currentTime+(details.seekOffset || 10); }],
-        ['seekto',        (details) => { 
-            if (details.fastSeek && 'fastSeek' in audio) {
-                audio.fastSeek(details.seekTime);
-                return;
-            }
-            audio.currentTime = details.seekTime;
-        }],
-    ];
 }
 
 ibvolumeinput.oninput = function() {
