@@ -314,6 +314,7 @@
 const folders = {};
 const songs = [];
 const images = [];
+var csong = [];
 
 const albums = document.getElementById("albums");
 
@@ -370,7 +371,10 @@ function selectalbum(dir) {
             }
         }
     }
-    for (let i = 0; i < songarray.length+1; i++) { 
+    if (!folders[dir]["queue"]) {
+        folders[dir]["queue"] = [];
+    }
+    for (let i = 0; i < songarray.length+1; i++) {     
         var vasongdiv = document.createElement("div");
         var vasongname = document.createElement("p");
         if (i == songarray.length) {
@@ -381,9 +385,12 @@ function selectalbum(dir) {
             vasongdiv.style.width = "100%";
             vasongdiv.style.borderTop = "1.5px solid #acacac";
         } else {
+            if (folders[dir]["queue"].indexOf(songarray[i][1]) == -1) {
+                folders[dir]["queue"].push(songarray[i][1]);
+            }
             vasongdiv.className = "vasongdiv";
             vasongname.innerText = songarray[i][0];
-            vasongdiv.setAttribute("onclick", `playsong('${songarray[i][1]}')`)
+            vasongdiv.setAttribute("onclick", `playsong(${songarray[i][1]}, '${dir}');`)
         }
         vasongdiv.appendChild(vasongname);
         vasongs.appendChild(vasongdiv);
@@ -463,12 +470,12 @@ async function scaleimage(url, width, height) {
 
 async function getcover(url) {
     const coverarray = [];
-    const scaledimg = await scaleimage(url,192,192);
+    const scaledimg = await scaleimage(url,170,170);
     const bigimg = await scaleimage(url,900,900);
     const img = new Image();
     img.src = url;
     img.onload = function() {
-        if (img.width > 192 && img.width < 901) {
+        if (img.width > 170 && img.width < 901) {
             coverarray.push({
                 src: url,
                 sizes: img.width+"x"+img.height,
@@ -476,7 +483,7 @@ async function getcover(url) {
             },
             {
                 src: scaledimg,
-                sizes: "192x192",
+                sizes: "170x170",
                 type: "image/png",
             });
         } else if (img.width > 900) {
@@ -487,7 +494,7 @@ async function getcover(url) {
             },
             {
                 src: scaledimg,
-                sizes: "192x192",
+                sizes: "170x170",
                 type: "image/png",
             });
         } else {
@@ -542,10 +549,22 @@ function media(action) {
         } 
     }
     if (action == "prev") {
-
+        if (csong[0]) {
+            if (folders[csong[1]]["queue"].indexOf(csong[0]) == 0 && !ibloop.style.filter) {
+                return;
+            }
+            var ns = folders[csong[1]]["queue"][folders[csong[1]]["queue"].indexOf(csong[0])-1] ?? folders[csong[1]]["queue"][folders[csong[1]]["queue"].length-1];
+            playsong(ns, csong[1]);
+        }
     }
     if (action == "next") {
-        console.log("neeeext!");
+        if (csong[0]) {
+            if (folders[csong[1]]["queue"].indexOf(csong[0])+1 == folders[csong[1]]["queue"].length && !ibloop.style.filter) {
+                return;
+            }
+            var ns = folders[csong[1]]["queue"][folders[csong[1]]["queue"].indexOf(csong[0])+1] ?? folders[csong[1]]["queue"][0];
+            playsong(ns, csong[1]);
+        }
     }
 }
 var defaultcover = [{
@@ -562,7 +581,9 @@ async function dc() {
     defaultcover[0].src = await scaleimage("https://awesomefied.github.io/WebPlayer/images/iconlarge.png",900,900);
 }
 dc();
-function playsong(snum) {
+function playsong(snum, dir) {
+    csong = [snum, dir];
+    console.log(csong);
     infobar.style = "";
     const sfolder = folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))];
     ibalbumtitle.innerText = songs[snum][0].split("/").pop();
