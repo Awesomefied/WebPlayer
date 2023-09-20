@@ -253,7 +253,7 @@
 <audio id="audio">
     <source id="audiosource" type="audio/mpeg">
 </audio>
-<input type="file" id="filepicker" name="fileList" webkitdirectory multiple />
+<input type="file" id="filepicker" name="fileList" accept=".." mozdirectory webkitdirectory allowdirs multiple />
 <div id="vacontainer" style="display: none;">
     <div id="vabackground"></div>
     <div id="blurdiv"></div>
@@ -390,11 +390,13 @@ function selectalbum(dir) {
             }
             vasongdiv.className = "vasongdiv";
             vasongname.innerText = songarray[i][0];
-            vasongdiv.setAttribute("onclick", `playsong(${songarray[i][1]}, '${dir}');`)
+            vasongdiv.setAttribute("onclick", `playsong(${songarray[i][1]}, ${'`'+dir+'`'});`);
         }
         vasongdiv.appendChild(vasongname);
         vasongs.appendChild(vasongdiv);
     }
+    vaplay.setAttribute("onclick", `playsong(${folders[dir]["queue"][0]}, ${'`'+dir+'`'});`);
+    vashuffle.setAttribute("onclick", "playsong(folders[`"+dir+"`]['queue'][rnum(folders[`"+dir+"`]['queue'].length)], `"+dir+"`);");
 	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/iconlarge.png";
 	vatitle.innerText = dir.split("/").pop();
 	vadir.innerText = dir.slice(0, dir.lastIndexOf("/"));
@@ -426,6 +428,10 @@ async function changecover(folder) {
         vabackground.style.backgroundImage = `url('${images[newindex]}')`;
         await updatecover(folder);
     }	
+}
+
+function rnum(max) {
+  return Math.floor(Math.random() * max);
 }
 
 function hideshow(id) {
@@ -549,7 +555,7 @@ function media(action) {
         } 
     }
     if (action == "prev") {
-        if (csong[0]) {
+        if (!ibshuffle.style.filter) {
             if (folders[csong[1]]["queue"].indexOf(csong[0]) == 0 && !ibloop.style.filter) {
                 return;
             }
@@ -558,7 +564,7 @@ function media(action) {
         }
     }
     if (action == "next") {
-        if (csong[0]) {
+        if (!ibshuffle.style.filter) {
             if (folders[csong[1]]["queue"].indexOf(csong[0])+1 == folders[csong[1]]["queue"].length && !ibloop.style.filter) {
                 return;
             }
