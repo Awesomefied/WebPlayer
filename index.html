@@ -97,7 +97,8 @@
         flex-direction: column;
         align-items: start;
         padding-bottom: 80px;
-    }
+        text-align: center;
+    } 
     .vabutton {
         width: 80px;
         background-color: rgba(255, 255, 255, 0.4);
@@ -315,6 +316,7 @@ const folders = {};
 const songs = [];
 const images = [];
 var csong = [];
+var squeue = [];
 
 const albums = document.getElementById("albums");
 
@@ -360,6 +362,7 @@ window.onresize = mobile;
 
 function selectalbum(dir) {
     vasongs.innerHTML = "";
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     var songarray = folders[dir]["songs"];
     if (!folders[dir]["songs"]) {
         songarray = [];
@@ -395,6 +398,7 @@ function selectalbum(dir) {
         vasongdiv.appendChild(vasongname);
         vasongs.appendChild(vasongdiv);
     }
+    folders[dir]["squeue"] = shuffle(folders[dir]["queue"]);
     vaplay.setAttribute("onclick", `playsong(${folders[dir]["queue"][0]}, ${'`'+dir+'`'});`);
     vashuffle.setAttribute("onclick", "playsong(folders[`"+dir+"`]['queue'][rnum(folders[`"+dir+"`]['queue'].length)], `"+dir+"`);");
 	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/iconlarge.png";
@@ -441,6 +445,21 @@ function hideshow(id) {
     } else {
         element.style.display = "none";
     }
+}
+
+function shuffle(input) {
+  let array = input.slice();
+  var m = array.length, t, i;
+  // While there remain elements to shuffle…
+  while (m) {
+    // Pick a remaining element…
+    i = Math.floor(Math.random() * m--);
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+  return array;
 }
 
 async function blob64(url) {
@@ -550,27 +569,28 @@ function media(action) {
     if (action == "shuffle") {
         if (!ibshuffle.style.filter) {
             ibshuffle.style.filter = "invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%)";
+            folders[csong[1]]["squeue"] = shuffle(folders[csong[1]]["queue"]);
         } else {
             ibshuffle.style.filter = "";
         } 
     }
+    var qstring = "queue";
+    if (ibshuffle.style.filter) {
+        qstring = "squeue";
+    }
     if (action == "prev") {
-        if (!ibshuffle.style.filter) {
-            if (folders[csong[1]]["queue"].indexOf(csong[0]) == 0 && !ibloop.style.filter) {
-                return;
-            }
-            var ns = folders[csong[1]]["queue"][folders[csong[1]]["queue"].indexOf(csong[0])-1] ?? folders[csong[1]]["queue"][folders[csong[1]]["queue"].length-1];
-            playsong(ns, csong[1]);
+        if (folders[csong[1]][qstring].indexOf(csong[0]) == 0 && !ibloop.style.filter) {
+            return;
         }
+        var ns = folders[csong[1]][qstring][folders[csong[1]][qstring].indexOf(csong[0])-1] ?? folders[csong[1]][qstring][folders[csong[1]][qstring].length-1];
+        playsong(ns, csong[1]);
     }
     if (action == "next") {
-        if (!ibshuffle.style.filter) {
-            if (folders[csong[1]]["queue"].indexOf(csong[0])+1 == folders[csong[1]]["queue"].length && !ibloop.style.filter) {
-                return;
-            }
-            var ns = folders[csong[1]]["queue"][folders[csong[1]]["queue"].indexOf(csong[0])+1] ?? folders[csong[1]]["queue"][0];
-            playsong(ns, csong[1]);
+        if (folders[csong[1]][qstring].indexOf(csong[0])+1 == folders[csong[1]][qstring].length && !ibloop.style.filter) {
+            return;
         }
+        var ns = folders[csong[1]][qstring][folders[csong[1]][qstring].indexOf(csong[0])+1] ?? folders[csong[1]][qstring][0];
+        playsong(ns, csong[1]);
     }
 }
 var defaultcover = [{
