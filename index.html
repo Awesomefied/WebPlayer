@@ -648,12 +648,14 @@ function playsong(snum, dir) {
                 }
                 audio.currentTime = details.seekTime;
             });
+            /*
             navigator.mediaSession.setActionHandler("seekbackward", () => {
                 audio.currentTime = audio.currentTime-(details.seekOffset || 10);
             });
             navigator.mediaSession.setActionHandler("seekforward", (details) => {
                 audio.currentTime = audio.currentTime+(details.seekOffset || 10);
             });
+            */
         }
     })
     .catch(error => { 
