@@ -617,50 +617,48 @@ function playsong(snum, dir) {
     ibalbumcover.src = images[sfolder["cover"][0]] ?? "./images/iconlarge.png";
     audiosource.src = songs[snum][1];
     audio.load();
-    audio.addEventListener("oncanplay", function() {
-        audio.play().then(_ => { 
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                title: songs[snum][0].split("/").pop(),
-                artist: songs[snum][0].split("/")[songs[snum][0].split("/").length-2],
-                album: '',
-                artwork: folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))]["cover"][2] ?? defaultcover,
-                });
-                navigator.mediaSession.setActionHandler("play", () => {
-                    audio.play();
-                });
-                navigator.mediaSession.setActionHandler("pause", () => {
-                    audio.pause();
-                });
-                navigator.mediaSession.setActionHandler("stop", () => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                });
-                navigator.mediaSession.setActionHandler("previoustrack", () => {
-                    media('prev');
-                });
-                navigator.mediaSession.setActionHandler("nexttrack", () => {
-                    media('next');
-                });
-                navigator.mediaSession.setActionHandler("seekto", (details) => { 
-                    if (details.fastSeek && 'fastSeek' in audio) {
-                        audio.fastSeek(details.seekTime);
-                        return;
-                    }
-                    audio.currentTime = details.seekTime;
-                });
-                navigator.mediaSession.setActionHandler("seekbackward", () => {
-                    audio.currentTime = audio.currentTime-(details.seekOffset || 10);
-                });
-                navigator.mediaSession.setActionHandler("seekforward", (details) => {
-                    audio.currentTime = audio.currentTime+(details.seekOffset || 10);
-                });
-            }
-        })
-        .catch(error => { 
-            console.log(`An error occured while trying to play the song "${songs[snum][0].split("/").pop()}"\nError message:`); 
-            console.log(error); 
-        });
+    audio.play().then(_ => { 
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+            title: songs[snum][0].split("/").pop(),
+            artist: songs[snum][0].split("/")[songs[snum][0].split("/").length-2],
+            album: '',
+            artwork: folders[songs[snum][0].slice(0, songs[snum][0].lastIndexOf("/"))]["cover"][2] ?? defaultcover,
+            });
+            navigator.mediaSession.setActionHandler("play", () => {
+                audio.play();
+            });
+            navigator.mediaSession.setActionHandler("pause", () => {
+                audio.pause();
+            });
+            navigator.mediaSession.setActionHandler("stop", () => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            navigator.mediaSession.setActionHandler("previoustrack", () => {
+                media('prev');
+            });
+            navigator.mediaSession.setActionHandler("nexttrack", () => {
+                media('next');
+            });
+            navigator.mediaSession.setActionHandler("seekto", (details) => { 
+                if (details.fastSeek && 'fastSeek' in audio) {
+                    audio.fastSeek(details.seekTime);
+                    return;
+                }
+                audio.currentTime = details.seekTime;
+            });
+            navigator.mediaSession.setActionHandler("seekbackward", () => {
+                audio.currentTime = audio.currentTime-(details.seekOffset || 10);
+            });
+            navigator.mediaSession.setActionHandler("seekforward", (details) => {
+                audio.currentTime = audio.currentTime+(details.seekOffset || 10);
+            });
+        }
+    })
+    .catch(error => { 
+        console.log(`An error occured while trying to play the song "${songs[snum][0].split("/").pop()}"\nError message:`); 
+        console.log(error); 
     });
 }
 
