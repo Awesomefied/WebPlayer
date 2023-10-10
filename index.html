@@ -253,7 +253,7 @@
 <audio id="audio">
     <source id="audiosource" type="audio/mpeg">
 </audio>
-<input type="file" id="filepicker" name="fileList" accept="`" directory mozdirectory webkitdirectory allowdirs multiple/>
+<input type="file" id="filepicker" name="fileList" accept="folder/*" directory mozdirectory webkitdirectory allowdirs multiple/>
 <div id="vacontainer" style="display: none;">
     <div id="vabackground"></div>
     <div id="blurdiv"></div>
@@ -391,6 +391,10 @@ function selectalbum(dir) {
             }
             vasongdiv.className = "vasongdiv";
             vasongname.innerText = songarray[i][0];
+            vasongname.id = songarray[i][1];
+            if (songarray[i][1] == csong[0]) {
+                vasongname.style.color = "green";
+            }
             vasongdiv.setAttribute("onclick", `playsong(${songarray[i][1]}, ${'`'+dir+'`'});`);
         }
         vasongdiv.appendChild(vasongname);
@@ -404,6 +408,9 @@ function selectalbum(dir) {
 	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/iconlarge.png";
 	vatitle.innerText = dir.split("/").pop();
 	vadir.innerText = dir.slice(0, dir.lastIndexOf("/"));
+    if (dir.search("/") == -1) {
+        vadir.innerText = dir;
+    }
     vacover.setAttribute("onclick", `changecover('${dir}');`);
 	if (!images[folders[dir]["cover"][0]]) {
 		vabackground.style.backgroundImage = "";	
@@ -444,6 +451,17 @@ function hideshow(id) {
         element.style.display = "";
     } else {
         element.style.display = "none";
+    }
+}
+
+function nowplaying(id,value) {
+    if (!document.getElementById(id)) {
+        return;
+    }
+    if (value == false) {
+        document.getElementById(id).style = "";
+    } else {
+        document.getElementById(id).style.color = "green"; 
     }
 }
 
@@ -608,6 +626,10 @@ async function dc() {
 }
 dc();
 function playsong(snum, dir) {
+    if (csong[0]) {
+        nowplaying(csong[0],false);
+    }
+    nowplaying(snum);
     csong = [snum, dir];
     console.log(csong);
     infobar.style = "";
@@ -706,9 +728,23 @@ document.getElementById("filepicker").addEventListener(
   "change",
   (event) => {
     hideshow('filepicker');
-    let output = document.getElementById("listing");
-    var safefolders = [];
+    const safefolders = [];
+    const tempnames = [];
+    const newfiles = [];
     for (const file of event.target.files) {
+        tempnames.push(file.webkitRelativePath);
+    }
+    tempnames.sort();
+    for (let i = 0; i < tempnames.length; i++) { 
+        const tempname = tempnames[i];
+        for (const file of event.target.files) {
+            if (tempname == file.webkitRelativePath) {
+                newfiles.push(file);
+            }
+        }
+    }
+    for (let i = 0; i < newfiles.length; i++) { 
+        const file = newfiles[i];
         const fname = file.webkitRelativePath.slice(0,file.webkitRelativePath.lastIndexOf("/"));
         if (!folders[fname]) {
             folders[fname] = {};
@@ -729,6 +765,9 @@ document.getElementById("filepicker").addEventListener(
         }
     	if (file.type.search("audio") != -1) {
             var lfolder = fname.slice(0,fname.lastIndexOf("/"));
+            if (lfolder.search("/") == -1) {
+                lfolder = fname;
+            }
             if (safefolders.indexOf(lfolder) == -1) {
                 safefolders.push(lfolder);
             }
