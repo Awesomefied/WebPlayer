@@ -684,6 +684,7 @@ function playsong(snum, dir) {
         media("next");
         console.log(`An error occured while trying to play the song "${songs[snum][0].split("/").pop()}"\nError message:`); 
         console.log(error); 
+        return;
     });
 }
 
