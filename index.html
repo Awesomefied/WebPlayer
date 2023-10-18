@@ -404,7 +404,7 @@ function selectalbum(dir) {
         folders[dir]["squeue"] = shuffle(folders[dir]["queue"]);
     }
     vaplay.setAttribute("onclick", `playsong(${folders[dir]["queue"][0]}, ${'`'+dir+'`'});`);
-    vashuffle.setAttribute("onclick", "playsong(folders[`"+dir+"`]['queue'][rnum(folders[`"+dir+"`]['queue'].length)], `"+dir+"`);");
+    vashuffle.setAttribute("onclick", "playsong(folders[`"+dir+"`]['queue'][rnum(folders[`"+dir+"`]['queue'].length)],`"+dir+"`);ibshuffle.style.filter='invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%)';");
 	vacover.src = images[folders[dir]["cover"][0]] ?? "./images/iconlarge.png";
 	vatitle.innerText = dir.split("/").pop();
 	vadir.innerText = dir.slice(0, dir.lastIndexOf("/"));
@@ -626,7 +626,7 @@ async function dc() {
 }
 dc();
 function playsong(snum, dir) {
-    if (csong[0]) {
+    if (csong[0] || csong[0] == 0) {
         nowplaying(csong[0],false);
     }
     nowplaying(snum);
@@ -681,6 +681,7 @@ function playsong(snum, dir) {
         }
     })
     .catch(error => { 
+        media("next");
         console.log(`An error occured while trying to play the song "${songs[snum][0].split("/").pop()}"\nError message:`); 
         console.log(error); 
     });
