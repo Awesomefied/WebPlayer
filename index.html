@@ -681,11 +681,11 @@ function playsong(snum, dir) {
         }
     })
     .catch(error => { 
-        console.log(`An error occured while trying to play the song "${songs[snum][0].split("/").pop()}"\nError message:`); 
+        console.log(`An error occured while trying to play the song "${songs[snum][0].split("/").pop()}"`); 
         console.log(error);
     });
     setTimeout(() => {
-        if (audio.networkState == 3) {
+        if (!audio.duration) { //audio.networkState == 3
             audiosource.src = "./blank.mp3";
             audio.load();
             audio.play();
