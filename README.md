@@ -6,6 +6,6 @@ Upload a folder that contains audio files and it will turn the folder into an al
 
 Mobile users must drag a folder into the upload prompt if it does not allow the selection of folders for upload.
 
-Audio might refuse to play if your browser does not support the specific format. 
+Audio will skip to the next song if your browser does not support the specific format (for example opus is not suported in Safari). 
 
-Add to queue function coming soon!!! :D
+Add to queue function coming in the future :O
