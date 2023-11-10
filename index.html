@@ -685,10 +685,18 @@ function playsong(snum, dir) {
         console.log(error);
     });
     setTimeout(() => {
-        if (!audio.duration) { //audio.networkState == 3
+        if (audio.networkState == 3) {
             audiosource.src = "./blank.mp3";
             audio.load();
             audio.play();
+        } else {
+            setTimeout(() => {
+                if (!audio.duration) {
+                    audiosource.src = "./blank.mp3";
+                    audio.load();
+                    audio.play();
+                }
+            }, "1000");
         }
     }, "500");
 }
