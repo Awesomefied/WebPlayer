@@ -1,0 +1,17 @@
+{
+  "name": "WebPlayer",
+  "short_name": "WebPlayer",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "https://awesomefied.github.io/WebPlayer/",
+  "description": "Blog and Resume for Christine Dodrill",
+  "icons": [
+      {
+          "src": "https://awesomefied.github.io/WebPlayer/images/icon.png",
+          "sizes": "256x256"
+      }
+  ]
+}
