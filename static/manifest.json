@@ -7,7 +7,7 @@
   "orientation": "portrait",
   "scope": "/",
   "start_url": "https://awesomefied.github.io/WebPlayer/",
-  "description": "Blog and Resume for Christine Dodrill",
+  "description": "HTML based music player by Awesomefied",
   "icons": [
       {
           "src": "https://awesomefied.github.io/WebPlayer/images/icon.png",
