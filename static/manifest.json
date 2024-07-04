@@ -10,8 +10,8 @@
   "description": "HTML based music player by Awesomefied",
   "icons": [
       {
-          "src": "https://awesomefied.github.io/WebPlayer/images/icon.png",
-          "sizes": "256x256"
+          "src": "https://awesomefied.github.io/WebPlayer/images/iconlarge.png",
+          "sizes": "1000x1000"
       }
   ]
 }
